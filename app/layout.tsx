@@ -10,7 +10,6 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Korakickz - Youth Sports Programs",
   description: "Quality sports programs for children ages 3-10 including soccer, basketball, and martial arts.",
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({
