@@ -8,7 +8,7 @@ export default function MMAPage() {
       <section className="relative h-[50vh] flex items-center justify-center">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/placeholder.svg?height=600&width=1600"
+            src="/mma-program.webp?height=600&width=1600"
             alt="Kids martial arts training"
             fill
             className="object-cover brightness-50"
@@ -43,14 +43,14 @@ export default function MMAPage() {
                 group, with a focus on technique rather than contact.
               </p>
             </div>
-            <div className="relative h-[400px] rounded-lg overflow-hidden">
-              <Image
-                src="/placeholder.svg?height=800&width=600"
-                alt="Martial arts training"
-                fill
-                className="object-cover"
-              />
-            </div>
+             <div className="relative h-[450px] rounded-lg overflow-hidden">
+               <Image
+                 src="/koraaaa.webp"
+                 alt="Kids playing sports"
+                 fill
+                 className="object-cover"
+               />
+             </div>
           </div>
         </div>
       </section>

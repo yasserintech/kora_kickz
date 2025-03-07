@@ -8,7 +8,7 @@ export default function BasketballPage() {
       <section className="relative h-[50vh] flex items-center justify-center">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/placeholder.svg?height=600&width=1600"
+            src="/basketball-program.jpeg?=600&width=1600"
             alt="Kids playing basketball"
             fill
             className="object-cover brightness-50"
@@ -27,10 +27,10 @@ export default function BasketballPage() {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="order-2 md:order-1 relative h-[400px] rounded-lg overflow-hidden">
+            <div className="relative h-[450px] rounded-lg overflow-hidden">
               <Image
-                src="/placeholder.svg?height=800&width=600"
-                alt="Basketball training"
+                src="/koraaaa.webp"
+                alt="Kids playing sports"
                 fill
                 className="object-cover"
               />

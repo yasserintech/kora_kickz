@@ -8,7 +8,7 @@ export default function SoccerPage() {
       <section className="relative h-[50vh] flex items-center justify-center">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/placeholder.svg?height=600&width=1600"
+            src="/soccer-program.png?height=600&width=1600"
             alt="Kids playing soccer"
             fill
             className="object-cover brightness-50"
@@ -44,8 +44,13 @@ export default function SoccerPage() {
                 foundation for their soccer journey.
               </p>
             </div>
-            <div className="relative h-[400px] rounded-lg overflow-hidden">
-              <Image src="/placeholder.svg?height=800&width=600" alt="Soccer training" fill className="object-cover" />
+            <div className="relative h-[450px] rounded-lg overflow-hidden">
+              <Image
+                src="/koraaaa.webp"
+                alt="Kids playing sports"
+                fill
+                className="object-cover"
+              />
             </div>
           </div>
         </div>

@@ -22,7 +22,7 @@ export default function Header() {
               Home
             </Link>
             <Link href="/mission" className="text-white hover:text-red-500 transition-colors">
-              Mission & Staff
+              Mission
             </Link>
             <Link href="/soccer" className="text-white hover:text-red-500 transition-colors">
               Soccer
@@ -59,7 +59,7 @@ export default function Header() {
                 className="text-white hover:text-red-500 transition-colors py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Mission & Staff
+                Mission
               </Link>
               <Link
                 href="/soccer"

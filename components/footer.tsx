@@ -44,9 +44,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/mission#staff" className="text-gray-400 hover:text-red-500 transition-colors">
+                {/* <Link href="/mission#staff" className="text-gray-400 hover:text-red-500 transition-colors">
                   Our Staff
-                </Link>
+                </Link> */}
               </li>
             </ul>
           </div>
@@ -60,11 +60,11 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2 text-gray-400">
                 <Mail size={16} className="text-red-500" />
-                Coming soon
+                korakickz@gmail.com
               </li>
               <li className="flex items-start gap-2 text-gray-400">
-                <MapPin size={16} className="text-red-500 mt-1" />
-                <span>Address coming soon</span>
+                {/* <MapPin size={16} className="text-red-500 mt-1" />
+                <span>Address coming soon</span> */}
               </li>
             </ul>
           </div>

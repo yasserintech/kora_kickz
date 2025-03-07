@@ -26,9 +26,9 @@ export default function MissionPage() {
                 succeed in all areas of life.
               </p>
             </div>
-            <div className="relative h-[400px] rounded-lg overflow-hidden">
+            <div className="relative h-[450px] rounded-lg overflow-hidden">
               <Image
-                src="/placeholder.svg?height=800&width=600"
+                src="/koraaaa.webp"
                 alt="Kids playing sports"
                 fill
                 className="object-cover"
@@ -70,9 +70,9 @@ export default function MissionPage() {
               <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mb-4 mx-auto">
                 <span className="text-white text-2xl font-bold">3</span>
               </div>
-              <h3 className="text-xl font-bold text-center mb-4">Character Building</h3>
+              <h3 className="text-xl font-bold text-center mb-4">Discipline & Respect</h3>
               <p className="text-gray-700 text-center">
-                We emphasize sportsmanship, teamwork, discipline, and respect in all of our programs.
+                Success comes from consistency and integrity. We foster commitment, accountability, and respect for others in every step of the journey.
               </p>
             </div>
           </div>
@@ -80,13 +80,13 @@ export default function MissionPage() {
       </section>
 
       {/* Staff Section */}
-      <section id="staff" className="py-16 bg-white">
+      {/* <section id="staff" className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Our Staff</h2>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8"> */}
             {/* Coach 1 */}
-            <div className="bg-gray-100 rounded-lg overflow-hidden shadow-md">
+            {/* <div className="bg-gray-100 rounded-lg overflow-hidden shadow-md">
               <div className="h-64 relative">
                 <Image src="/placeholder.svg?height=400&width=400" alt="Coach" fill className="object-cover" />
               </div>
@@ -97,10 +97,10 @@ export default function MissionPage() {
                   Coach Michael has over 10 years of experience coaching youth soccer and holds a USSF C License.
                 </p>
               </div>
-            </div>
+            </div> */}
 
             {/* Coach 2 */}
-            <div className="bg-gray-100 rounded-lg overflow-hidden shadow-md">
+            {/* <div className="bg-gray-100 rounded-lg overflow-hidden shadow-md">
               <div className="h-64 relative">
                 <Image src="/placeholder.svg?height=400&width=400" alt="Coach" fill className="object-cover" />
               </div>
@@ -112,10 +112,10 @@ export default function MissionPage() {
                   athletes.
                 </p>
               </div>
-            </div>
+            </div> */}
 
             {/* Coach 3 */}
-            <div className="bg-gray-100 rounded-lg overflow-hidden shadow-md">
+            {/* <div className="bg-gray-100 rounded-lg overflow-hidden shadow-md">
               <div className="h-64 relative">
                 <Image src="/placeholder.svg?height=400&width=400" alt="Coach" fill className="object-cover" />
               </div>
@@ -130,7 +130,7 @@ export default function MissionPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </main>
   )
 }

@@ -10,7 +10,7 @@ export default function Home() {
       <section className="relative h-[70vh] flex items-center justify-center">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/placeholder.svg?height=800&width=1600"
+            src="/kids-playing-sports.jpg?height=788&width=1400"
             alt="Kids playing sports"
             fill
             className="object-cover brightness-50"
@@ -29,7 +29,7 @@ export default function Home() {
             <Button asChild size="lg" className="bg-red-600 hover:bg-red-700">
               <Link href="#programs">Explore Programs</Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
+            <Button asChild variant="outline" size="lg" className="border-white text-red hover:bg-white/10">
               <Link href="/mission">Our Mission</Link>
             </Button>
           </div>
@@ -45,7 +45,7 @@ export default function Home() {
             {/* Soccer Program */}
             <div className="bg-gray-100 rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
               <div className="h-48 bg-red-600 relative">
-                <Image src="/placeholder.svg?height=400&width=600" alt="Soccer program" fill className="object-cover" />
+                <Image src="/kids-playing-soccer.jpg?height=3593&width=5389" alt="Soccer program" fill className="object-cover" />
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-bold mb-2">Soccer</h3>
@@ -62,7 +62,7 @@ export default function Home() {
             <div className="bg-gray-100 rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
               <div className="h-48 bg-red-600 relative">
                 <Image
-                  src="/placeholder.svg?height=400&width=600"
+                  src="/kids-playing-basketball.jpg?height=5898&width=3932"
                   alt="Basketball program"
                   fill
                   className="object-cover"
@@ -82,7 +82,7 @@ export default function Home() {
             {/* MMA/Boxing/Wrestling Program */}
             <div className="bg-gray-100 rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
               <div className="h-48 bg-red-600 relative">
-                <Image src="/placeholder.svg?height=400&width=600" alt="MMA program" fill className="object-cover" />
+                <Image src="/kids-MMA.jpg?height=4720&width=3147" alt="MMA program" fill className="object-cover" />
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-bold mb-2">MMA/Boxing/Wrestling</h3>
