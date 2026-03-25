@@ -68,7 +68,7 @@ export default function Footer() {
                 <Mail size={16} className="text-red-500" />
                 korakickz@gmail.com
               </li>
-              <li className="text-gray-400">Bright and Busy Daycare, 33-02 30th Ave, Astoria, New York</li>
+              <li className="text-gray-400">33-02 30th Ave, Astoria, New York</li>
             </ul>
           </div>
         </div>

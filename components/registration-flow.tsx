@@ -441,7 +441,11 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
               <p className="text-sm text-gray-700">
                 The class is currently full. Join the waiting list and we will contact you if a spot opens.
               </p>
-              <WaitlistForm programSlug={program.slug} />
+              <WaitlistForm
+                programSlug={program.slug}
+                requestedTimes={[program.timeLabel]}
+                title={`Join the waitlist for the ${program.timeLabel} class`}
+              />
             </CardContent>
           </Card>
         ) : null}

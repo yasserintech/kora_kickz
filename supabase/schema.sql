@@ -59,6 +59,7 @@ create table if not exists public.waitlist_entries (
   program_slug text not null,
   parent_name text not null,
   email text not null,
+  requested_time_labels text[] not null default '{}'::text[],
   created_at timestamptz not null default timezone('utc', now()),
   unique (program_slug, email)
 );

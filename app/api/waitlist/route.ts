@@ -6,6 +6,7 @@ const waitlistSchema = z.object({
   programSlug: z.string().min(1),
   parentName: z.string().min(2),
   email: z.string().email(),
+  requestedTimes: z.array(z.string().min(1)).min(1),
 })
 
 export async function POST(request: Request) {

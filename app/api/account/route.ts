@@ -20,6 +20,7 @@ type WaitlistRow = {
   id: string
   parent_name: string
   email: string
+  requested_time_labels: string[]
   created_at: string
   programs: {
     title: string
@@ -62,7 +63,7 @@ export async function GET(request: Request) {
     const userEmail = (profile?.email || user.email || "").toLowerCase()
     const waitlistQuery = supabase
       .from("waitlist_entries")
-      .select("id,parent_name,email,created_at,programs(title,date_range_label)")
+      .select("id,parent_name,email,requested_time_labels,created_at,programs(title,date_range_label)")
       .order("created_at", { ascending: false })
 
     const { data: waitlistEntries, error: waitlistError } = userEmail
@@ -87,6 +88,7 @@ export async function GET(request: Request) {
       id: entry.id,
       parent_name: entry.parent_name,
       email: entry.email,
+      requested_time_labels: entry.requested_time_labels ?? [],
       created_at: entry.created_at,
       programs: Array.isArray(entry.programs) ? entry.programs[0] ?? null : entry.programs,
     }))

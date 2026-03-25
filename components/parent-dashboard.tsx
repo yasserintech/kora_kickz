@@ -38,6 +38,7 @@ type DashboardData = {
     id: string
     parent_name: string
     email: string
+    requested_time_labels: string[]
     created_at: string
     programs: {
       title: string
@@ -446,6 +447,7 @@ export function ParentDashboard() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Program</TableHead>
+                  <TableHead>Requested Time(s)</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Submitted</TableHead>
                 </TableRow>
@@ -457,6 +459,7 @@ export function ParentDashboard() {
                       <div className="font-medium text-black">{entry.programs?.title ?? "Program"}</div>
                       <div className="text-xs text-gray-500">{entry.programs?.date_range_label ?? ""}</div>
                     </TableCell>
+                    <TableCell>{entry.requested_time_labels.join(", ") || "No specific time selected"}</TableCell>
                     <TableCell>{entry.email}</TableCell>
                     <TableCell>{new Date(entry.created_at).toLocaleDateString()}</TableCell>
                   </TableRow>

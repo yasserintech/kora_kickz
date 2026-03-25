@@ -21,6 +21,13 @@ export type ProgramDefinition = {
   waiverLabel: string
 }
 
+export type ProgramGroup = {
+  slug: string
+  title: string
+  description: string
+  programs: ProgramDefinition[]
+}
+
 export type ProgramAvailability = {
   capacity: number
   paidCount: number
@@ -36,7 +43,7 @@ export const TEMPORARY_WAIVER_COPY =
   "This program includes physical activities such as soccer instruction, movement drills, and general athletic training. Participation involves active physical movement and carries the possibility of bumps, falls, and other risks that can occur during youth sports."
 
 export const brightBusySaturdayAcademy: ProgramDefinition = {
-  slug: "bright-busy-saturday-academy",
+  slug: "bright-busy-saturday-academy-10am",
   sport: "soccer",
   title: "Bright & Busy Saturday Academy",
   subtitle: "Saturday soccer training for ages 2–13 in Astoria",
@@ -87,10 +94,24 @@ export const brightBusySaturdayAcademyLate: ProgramDefinition = {
 
 export const soccerPrograms = [brightBusySaturdayAcademy, brightBusySaturdayAcademyLate]
 
+export const brightBusySaturdayAcademyGroup: ProgramGroup = {
+  slug: "bright-busy-saturday-academy",
+  title: "Bright & Busy Saturday Academy",
+  description:
+    "Register once, then choose from the available Saturday soccer class times at Bright and Busy Daycare.",
+  programs: soccerPrograms,
+}
+
 export const programs = [...soccerPrograms]
+
+export const programGroups = [brightBusySaturdayAcademyGroup]
 
 export function getProgramBySlug(slug: string) {
   return programs.find((program) => program.slug === slug)
+}
+
+export function getProgramGroupBySlug(slug: string) {
+  return programGroups.find((group) => group.slug === slug)
 }
 
 export function formatCurrency(amount: number) {

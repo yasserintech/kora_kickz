@@ -1,11 +1,11 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ProgramAvailabilityPanel } from "@/components/program-availability-panel"
+import { GroupRegistrationPanel } from "@/components/group-registration-panel"
 import {
   brightBusySaturdayAcademy,
   brightBusySaturdayAcademyLate,
-  defaultAvailability,
+  brightBusySaturdayAcademyGroup,
   KORAKICKZ_AGE_COPY,
 } from "@/lib/programs"
 
@@ -76,7 +76,7 @@ export default function SoccerPage() {
             <div className="rounded-lg bg-white p-8 shadow-md">
               <h3 className="text-2xl font-bold text-black">Available Soccer Classes</h3>
               <p className="mt-3 text-gray-700">
-                Choose the time that works best for your family and continue into the soccer registration flow.
+                Click register once, then choose the class time that works best for your family in the next step.
               </p>
               <div className="mt-6 grid gap-4 md:grid-cols-2">
                 <div className="rounded-lg bg-gray-50 p-4">
@@ -97,15 +97,12 @@ export default function SoccerPage() {
               </div>
               <div className="mt-6">
                 <Button asChild className="bg-red-600 hover:bg-red-700">
-                  <Link href="/soccer/find-my-class">Choose A Soccer Class</Link>
+                  <Link href="/register?group=bright-busy-saturday-academy">Register</Link>
                 </Button>
               </div>
             </div>
 
-            <div className="space-y-6">
-              <ProgramAvailabilityPanel program={brightBusySaturdayAcademy} initialAvailability={defaultAvailability} compact />
-              <ProgramAvailabilityPanel program={brightBusySaturdayAcademyLate} initialAvailability={defaultAvailability} compact />
-            </div>
+            <GroupRegistrationPanel group={brightBusySaturdayAcademyGroup} />
           </div>
         </div>
       </section>
@@ -166,7 +163,7 @@ export default function SoccerPage() {
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button asChild size="lg" className="bg-red-600 hover:bg-red-700">
-              <Link href="/soccer/find-my-class">Find My Soccer Classes</Link>
+              <Link href="/register?group=bright-busy-saturday-academy">Register</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
               <a href="tel:2012333333">Call Us: (201) 233-3333</a>

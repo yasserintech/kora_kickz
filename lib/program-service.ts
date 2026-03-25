@@ -133,6 +133,7 @@ export async function createOrUpdateProgramWaitlistEntry(input: {
   programSlug: string
   parentName: string
   email: string
+  requestedTimes: string[]
 }) {
   const program = getProgramBySlug(input.programSlug)
 
@@ -147,6 +148,7 @@ export async function createOrUpdateProgramWaitlistEntry(input: {
     program_slug: program.slug,
     parent_name: input.parentName,
     email: input.email.toLowerCase(),
+    requested_time_labels: input.requestedTimes,
   }
 
   const { error } = await supabase.from("waitlist_entries").upsert(payload, {

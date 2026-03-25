@@ -1,9 +1,9 @@
 import Link from "next/link"
-import { ProgramAvailabilityPanel } from "@/components/program-availability-panel"
+import { GroupRegistrationPanel } from "@/components/group-registration-panel"
 import {
   brightBusySaturdayAcademy,
   brightBusySaturdayAcademyLate,
-  defaultAvailability,
+  brightBusySaturdayAcademyGroup,
   KORAKICKZ_AGE_COPY,
 } from "@/lib/programs"
 
@@ -71,8 +71,8 @@ export default function FindMyClassPage() {
               <h2 className="text-2xl font-bold text-black">Simple Registration Flow</h2>
               <div className="mt-5 grid gap-3 text-sm text-gray-700 md:grid-cols-2">
                 <div className="rounded-xl bg-gray-50 p-4">Step 1: Parent selects the program</div>
-                <div className="rounded-xl bg-gray-50 p-4">Step 2: Adds it to cart</div>
-                <div className="rounded-xl bg-gray-50 p-4">Step 3: Creates an account or logs in</div>
+                <div className="rounded-xl bg-gray-50 p-4">Step 2: Clicks Register and chooses a class time</div>
+                <div className="rounded-xl bg-gray-50 p-4">Step 3: Adds it to cart</div>
                 <div className="rounded-xl bg-gray-50 p-4">Step 4: Fills out child and parent information</div>
                 <div className="rounded-xl bg-gray-50 p-4">Step 5: Agrees to the liability waiver</div>
                 <div className="rounded-xl bg-gray-50 p-4">Step 6: Pays the $190 total fee and receives confirmation</div>
@@ -81,8 +81,7 @@ export default function FindMyClassPage() {
           </div>
 
           <div className="space-y-6">
-            <ProgramAvailabilityPanel program={brightBusySaturdayAcademy} initialAvailability={defaultAvailability} />
-            <ProgramAvailabilityPanel program={brightBusySaturdayAcademyLate} initialAvailability={defaultAvailability} />
+            <GroupRegistrationPanel group={brightBusySaturdayAcademyGroup} />
             <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
               <p className="text-sm text-gray-600">
                 Looking for a broader overview first? Visit the{" "}
