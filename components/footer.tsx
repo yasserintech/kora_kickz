@@ -1,6 +1,7 @@
 import Link from "next/link"
-import { Phone, Mail, MapPin } from "lucide-react"
+import { Phone, Mail } from "lucide-react"
 import Logo from "./logo"
+import { KORAKICKZ_AGE_COPY } from "@/lib/programs"
 
 export default function Footer() {
   return (
@@ -10,7 +11,7 @@ export default function Footer() {
           <div className="flex flex-col items-start">
             <Logo />
             <p className="mt-4 text-gray-400">
-              Building champions for life through quality sports programs for children ages 3-10.
+              Building champions for life through quality sports programs. {KORAKICKZ_AGE_COPY}
             </p>
           </div>
 
@@ -44,6 +45,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/policy" className="text-gray-400 hover:text-red-500 transition-colors">
+                  Parent Policy
+                </Link>
+              </li>
+              <li>
                 {/* <Link href="/mission#staff" className="text-gray-400 hover:text-red-500 transition-colors">
                   Our Staff
                 </Link> */}
@@ -62,10 +68,7 @@ export default function Footer() {
                 <Mail size={16} className="text-red-500" />
                 korakickz@gmail.com
               </li>
-              <li className="flex items-start gap-2 text-gray-400">
-                {/* <MapPin size={16} className="text-red-500 mt-1" />
-                <span>Address coming soon</span> */}
-              </li>
+              <li className="text-gray-400">Bright and Busy Daycare, 33-02 30th Ave, Astoria, New York</li>
             </ul>
           </div>
         </div>
@@ -77,4 +80,3 @@ export default function Footer() {
     </footer>
   )
 }
-

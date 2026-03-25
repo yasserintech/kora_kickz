@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { KORAKICKZ_AGE_COPY } from "@/lib/programs"
 
 export default function MissionPage() {
   return (
@@ -21,9 +22,9 @@ export default function MissionPage() {
                 concepts.
               </p>
               <p className="text-gray-700">
-                Through our diverse offerings in soccer, basketball, and martial arts, we aim to help children ages 3-10
-                discover their passions, build healthy habits, and develop the mental and physical tools they need to
-                succeed in all areas of life.
+                Through our diverse offerings in soccer, basketball, and martial arts, we aim to help children discover
+                their passions, build healthy habits, and develop the mental and physical tools they need to succeed in
+                all areas of life. {KORAKICKZ_AGE_COPY}
               </p>
             </div>
             <div className="relative h-[450px] rounded-lg overflow-hidden">
@@ -134,4 +135,3 @@ export default function MissionPage() {
     </main>
   )
 }
-

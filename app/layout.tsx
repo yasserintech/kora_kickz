@@ -1,15 +1,13 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
 import "./globals.css"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-
-const inter = Inter({ subsets: ["latin"] })
+import { KORAKICKZ_AGE_COPY } from "@/lib/programs"
 
 export const metadata: Metadata = {
   title: "Korakickz - Youth Sports Programs",
-  description: "Quality sports programs for children ages 3-10 including soccer, basketball, and martial arts.",
+  description: `${KORAKICKZ_AGE_COPY} Explore soccer, basketball, and martial arts programs for young athletes.`,
 }
 
 export default function RootLayout({
@@ -19,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <Header />
         {children}
         <Footer />
@@ -27,7 +25,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-
-
-import './globals.css'

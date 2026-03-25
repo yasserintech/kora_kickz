@@ -33,6 +33,12 @@ export default function Header() {
             <Link href="/mma" className="text-white hover:text-red-500 transition-colors">
               MMA/Boxing/Wrestling
             </Link>
+            <Link href="/policy" className="text-white hover:text-red-500 transition-colors">
+              Policy
+            </Link>
+            <Link href="/account" className="text-white hover:text-red-500 transition-colors">
+              Account
+            </Link>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -82,6 +88,20 @@ export default function Header() {
               >
                 MMA/Boxing/Wrestling
               </Link>
+              <Link
+                href="/policy"
+                className="text-white hover:text-red-500 transition-colors py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Policy
+              </Link>
+              <Link
+                href="/account"
+                className="text-white hover:text-red-500 transition-colors py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Account
+              </Link>
             </nav>
           </div>
         </div>
@@ -89,4 +109,3 @@ export default function Header() {
     </header>
   )
 }
-

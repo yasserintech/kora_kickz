@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { PhoneCall } from "lucide-react"
+import { KORAKICKZ_AGE_COPY } from "@/lib/programs"
 
 export default function Home() {
   return (
@@ -22,17 +23,21 @@ export default function Home() {
             Building Champions <span className="text-red-500">For Life</span>
           </h1>
           <p className="text-xl text-white mb-8 max-w-2xl mx-auto">
-            Korakickz provides quality sports programs for children ages 3-10, developing skills, confidence, and
-            character.
+            {KORAKICKZ_AGE_COPY} We build skills, confidence, and character through fun, structured training.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="bg-red-600 hover:bg-red-700">
               <Link href="#programs">Explore Programs</Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="border-white text-red hover:bg-white/10">
-              <Link href="/mission">Our Mission</Link>
+            <Button asChild size="lg" className="bg-red-600 text-white hover:bg-red-700">
+              <Link href="/find-my-class">Find My Class</Link>
             </Button>
           </div>
+          <p className="mt-4 text-sm text-white">
+            <Link href="/policy" className="font-semibold text-red-400 underline-offset-4 hover:underline">
+              Review Parent Policy
+            </Link>
+          </p>
         </div>
       </section>
 
@@ -52,9 +57,14 @@ export default function Home() {
                 <p className="text-gray-700 mb-4">
                   Develop coordination, teamwork, and soccer fundamentals in a fun, supportive environment.
                 </p>
-                <Button asChild className="w-full bg-red-600 hover:bg-red-700">
-                  <Link href="/soccer">Learn More</Link>
-                </Button>
+                <div className="space-y-3">
+                  <Button asChild className="w-full bg-red-600 hover:bg-red-700">
+                    <Link href="/soccer">Learn More</Link>
+                  </Button>
+                  <Button asChild variant="outline" className="w-full">
+                    <Link href="/soccer/find-my-class">Find My Class</Link>
+                  </Button>
+                </div>
               </div>
             </div>
 
@@ -103,9 +113,12 @@ export default function Home() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Join Korakickz?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Give your child the gift of sports, confidence, and lifelong skills.
+            Give your child the gift of sports, confidence, and lifelong skills with a registration flow that is simple and secure.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" className="bg-red-600 text-white hover:bg-red-700">
+              <Link href="/find-my-class">Find My Class</Link>
+            </Button>
             <Button asChild size="lg" className="bg-red-600 hover:bg-red-700">
               <a href="tel:2012333333" className="flex items-center gap-2">
                 <PhoneCall size={18} />
@@ -113,9 +126,13 @@ export default function Home() {
               </a>
             </Button>
           </div>
+          <p className="mt-4 text-sm">
+            <Link href="/policy" className="font-semibold text-red-400 underline-offset-4 hover:underline">
+              Parent Policy
+            </Link>
+          </p>
         </div>
       </section>
     </main>
   )
 }
-

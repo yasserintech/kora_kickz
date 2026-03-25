@@ -1,5 +1,7 @@
 import Image from "next/image"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { KORAKICKZ_AGE_COPY } from "@/lib/programs"
 
 export default function MMAPage() {
   return (
@@ -20,6 +22,11 @@ export default function MMAPage() {
           <p className="text-xl text-white mb-8 max-w-2xl mx-auto">
             Building discipline, confidence, and physical fitness through martial arts
           </p>
+          <p className="text-sm text-white">
+            <Link href="/policy" className="font-semibold text-red-300 underline-offset-4 hover:underline">
+              Review Parent Policy
+            </Link>
+          </p>
         </div>
       </section>
 
@@ -30,8 +37,7 @@ export default function MMAPage() {
             <div>
               <h2 className="text-3xl font-bold mb-6">Program Overview</h2>
               <p className="text-gray-700 mb-4">
-                Our martial arts program combines elements of MMA, boxing, and wrestling to provide children ages 3-10
-                with a well-rounded introduction to combat sports in a safe, controlled environment.
+                {KORAKICKZ_AGE_COPY} Our martial arts program combines MMA, boxing, and wrestling fundamentals in a safe, controlled environment.
               </p>
               <p className="text-gray-700 mb-4">
                 Each session focuses on age-appropriate techniques while emphasizing discipline, respect, and
@@ -55,14 +61,14 @@ export default function MMAPage() {
         </div>
       </section>
 
-      {/* Age Groups */}
+      {/* Program Focus */}
       <section className="py-16 bg-gray-100">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Age Groups</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Program Focus</h2>
 
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-center mb-4 text-red-600">Little Dragons (Ages 3-4)</h3>
+              <h3 className="text-xl font-bold text-center mb-4 text-red-600">Movement & Listening</h3>
               <ul className="space-y-2 text-gray-700">
                 <li>• Introduction to basic movements</li>
                 <li>• Fun games that develop coordination</li>
@@ -73,7 +79,7 @@ export default function MMAPage() {
             </div>
 
             <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-center mb-4 text-red-600">Junior Warriors (Ages 5-7)</h3>
+              <h3 className="text-xl font-bold text-center mb-4 text-red-600">Technique & Discipline</h3>
               <ul className="space-y-2 text-gray-700">
                 <li>• Basic martial arts techniques</li>
                 <li>• Introduction to stances and movement</li>
@@ -84,7 +90,7 @@ export default function MMAPage() {
             </div>
 
             <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-center mb-4 text-red-600">Young Champions (Ages 8-10)</h3>
+              <h3 className="text-xl font-bold text-center mb-4 text-red-600">Strength & Confidence</h3>
               <ul className="space-y-2 text-gray-700">
                 <li>• More advanced techniques</li>
                 <li>• Introduction to combinations and strategy</li>
@@ -195,12 +201,16 @@ export default function MMAPage() {
           <p className="text-xl mb-8 max-w-2xl mx-auto">
             Give your child the opportunity to learn valuable skills that will benefit them for life.
           </p>
-          <Button asChild size="lg" className="bg-red-600 hover:bg-red-700">
-            <a href="tel:2012333333">Call Us: (201) 233-3333</a>
-          </Button>
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Button asChild size="lg" className="bg-red-600 hover:bg-red-700">
+              <a href="tel:2012333333">Call Us: (201) 233-3333</a>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Link href="/policy">Parent Policy</Link>
+            </Button>
+          </div>
         </div>
       </section>
     </main>
   )
 }
-

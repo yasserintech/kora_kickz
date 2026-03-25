@@ -1,5 +1,7 @@
 import Image from "next/image"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { KORAKICKZ_AGE_COPY } from "@/lib/programs"
 
 export default function BasketballPage() {
   return (
@@ -20,6 +22,11 @@ export default function BasketballPage() {
           <p className="text-xl text-white mb-8 max-w-2xl mx-auto">
             Building skills, confidence, and teamwork on the court
           </p>
+          <p className="text-sm text-white">
+            <Link href="/policy" className="font-semibold text-red-300 underline-offset-4 hover:underline">
+              Review Parent Policy
+            </Link>
+          </p>
         </div>
       </section>
 
@@ -38,9 +45,7 @@ export default function BasketballPage() {
             <div className="order-1 md:order-2">
               <h2 className="text-3xl font-bold mb-6">Program Overview</h2>
               <p className="text-gray-700 mb-4">
-                Our basketball program introduces children ages 3-10 to the fundamentals of basketball in an engaging,
-                supportive environment. Through age-appropriate drills, games, and activities, children develop
-                coordination, teamwork, and basketball skills.
+                {KORAKICKZ_AGE_COPY} Our basketball sessions focus on fundamentals, movement, and confidence in an engaging and supportive environment.
               </p>
               <p className="text-gray-700 mb-4">
                 Each session focuses on skill development while emphasizing positive values like sportsmanship, respect,
@@ -56,14 +61,14 @@ export default function BasketballPage() {
         </div>
       </section>
 
-      {/* Age Groups */}
+      {/* Program Focus */}
       <section className="py-16 bg-gray-100">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Age Groups</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Program Focus</h2>
 
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-center mb-4 text-red-600">Mini Ballers (Ages 3-4)</h3>
+              <h3 className="text-xl font-bold text-center mb-4 text-red-600">Movement Foundations</h3>
               <ul className="space-y-2 text-gray-700">
                 <li>• Introduction to basic movements</li>
                 <li>• Fun games that develop coordination</li>
@@ -74,7 +79,7 @@ export default function BasketballPage() {
             </div>
 
             <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-center mb-4 text-red-600">Junior Dribblers (Ages 5-7)</h3>
+              <h3 className="text-xl font-bold text-center mb-4 text-red-600">Skill Building</h3>
               <ul className="space-y-2 text-gray-700">
                 <li>• Basic basketball skills and rules</li>
                 <li>• Modified games with lower hoops</li>
@@ -85,7 +90,7 @@ export default function BasketballPage() {
             </div>
 
             <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-center mb-4 text-red-600">Rising Stars (Ages 8-10)</h3>
+              <h3 className="text-xl font-bold text-center mb-4 text-red-600">Confidence Through Play</h3>
               <ul className="space-y-2 text-gray-700">
                 <li>• Advanced skill development</li>
                 <li>• Basic offensive and defensive concepts</li>
@@ -154,12 +159,16 @@ export default function BasketballPage() {
           <p className="text-xl mb-8 max-w-2xl mx-auto">
             Give your child the opportunity to learn, grow, and have fun with our expert coaches.
           </p>
-          <Button asChild size="lg" className="bg-red-600 hover:bg-red-700">
-            <a href="tel:2012333333">Call Us: (201) 233-3333</a>
-          </Button>
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Button asChild size="lg" className="bg-red-600 hover:bg-red-700">
+              <a href="tel:2012333333">Call Us: (201) 233-3333</a>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Link href="/policy">Parent Policy</Link>
+            </Button>
+          </div>
         </div>
       </section>
     </main>
   )
 }
-
