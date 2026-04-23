@@ -332,8 +332,8 @@ export function ParentDashboard() {
             <p>It includes their registered child or children, class names, payment and registration status, and any waiting list entries tied to their account email.</p>
             <p>
               Need to register first? Visit{" "}
-              <Link href="/soccer/find-my-class" className="font-semibold text-red-600 underline-offset-4 hover:underline">
-                Soccer → Find My Class
+              <Link href="/soccer/registration" className="font-semibold text-red-600 underline-offset-4 hover:underline">
+                Soccer → Registration
               </Link>
               .
             </p>

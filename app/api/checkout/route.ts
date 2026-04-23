@@ -14,6 +14,7 @@ const checkoutSchema = z.object({
   childName: z.string().min(1),
   childAge: z.coerce.number().int().min(2).max(13),
   waiverAccepted: z.literal(true),
+  photoConsentAccepted: z.literal(true),
 })
 
 export async function POST(request: Request) {
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
     const availability = await getProgramAvailability(program.slug)
 
     if (availability.soldOut) {
-      return NextResponse.json({ error: "This class is sold out. Please join the waiting list instead." }, { status: 409 })
+      return NextResponse.json({ error: "This class is full. Please join the waiting list instead." }, { status: 409 })
     }
 
     const supabase = getSupabaseServiceClient()
@@ -89,6 +90,7 @@ export async function POST(request: Request) {
         child_name: body.childName,
         child_age: body.childAge,
         liability_accepted: body.waiverAccepted,
+        photo_consent_accepted: body.photoConsentAccepted,
         status: "pending_payment",
         reservation_expires_at: reservationExpiresAt,
         program_fee: program.programFee,
@@ -125,16 +127,20 @@ export async function POST(request: Request) {
             unit_amount: program.programFee * 100,
           },
         },
-        {
-          quantity: 1,
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: "Organization & Management Fee",
-            },
-            unit_amount: program.organizationFee * 100,
-          },
-        },
+        ...(program.organizationFee > 0
+          ? [
+              {
+                quantity: 1,
+                price_data: {
+                  currency: "usd",
+                  product_data: {
+                    name: "Organization & Management Fee",
+                  },
+                  unit_amount: program.organizationFee * 100,
+                },
+              },
+            ]
+          : []),
       ],
     })
 

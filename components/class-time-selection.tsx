@@ -57,7 +57,7 @@ export function ClassTimeSelection({ group }: Props) {
       {!hasOpenTime ? (
         <Card className="border-red-100 shadow-sm">
           <CardContent className="p-6 text-sm text-gray-700">
-            All class times are currently full. You can join the waitlist for a specific time below.
+            All class options are currently full. You can join the waitlist for a specific class below.
           </CardContent>
         </Card>
       ) : null}
@@ -72,19 +72,22 @@ export function ClassTimeSelection({ group }: Props) {
                 <div className={`inline-flex w-fit rounded-full px-3 py-1 text-sm font-semibold ${availability.soldOut ? "bg-black text-white" : availability.remaining <= 2 ? "bg-red-600 text-white" : "bg-red-100 text-red-700"}`}>
                   {availability.message}
                 </div>
-                <CardTitle className="text-2xl">{program.timeLabel}</CardTitle>
+                <CardTitle className="text-2xl">{program.title}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 text-sm text-gray-700">
+                <p>{program.timeLabel}</p>
                 <p>{program.dateRangeLabel}</p>
                 <p>{program.locationName}</p>
                 <div className="flex items-center justify-between border-b pb-2">
                   <span>Program Fee</span>
                   <span className="font-semibold">${program.programFee}</span>
                 </div>
-                <div className="flex items-center justify-between border-b pb-2">
-                  <span>Organization &amp; Management Fee</span>
-                  <span className="font-semibold">${program.organizationFee}</span>
-                </div>
+                {program.organizationFee > 0 ? (
+                  <div className="flex items-center justify-between border-b pb-2">
+                    <span>Organization &amp; Management Fee</span>
+                    <span className="font-semibold">${program.organizationFee}</span>
+                  </div>
+                ) : null}
                 <div className="flex items-center justify-between text-base font-semibold text-black">
                   <span>Total</span>
                   <span>${program.totalFee}</span>
@@ -92,13 +95,13 @@ export function ClassTimeSelection({ group }: Props) {
 
                 {!availability.soldOut ? (
                   <Button asChild className="w-full bg-red-600 hover:bg-red-700">
-                    <Link href={`/register?program=${program.slug}`}>Choose This Time</Link>
+                    <Link href={`/register?program=${program.slug}`}>Choose This Class</Link>
                   </Button>
                 ) : (
                   <WaitlistForm
                     programSlug={program.slug}
-                    requestedTimes={[program.timeLabel]}
-                    title={`Join the waitlist for the ${program.timeLabel} class`}
+                    requestedTimes={[`${program.title} - ${program.timeLabel}`]}
+                    title={`Join the waitlist for ${program.title}`}
                   />
                 )}
               </CardContent>

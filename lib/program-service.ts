@@ -1,8 +1,8 @@
 import {
-  brightBusySaturdayAcademy,
   defaultAvailability,
   getAvailabilityMessage,
   getProgramBySlug,
+  summerParentAndMe,
   type ProgramAvailability,
   type ProgramDefinition,
 } from "@/lib/programs"
@@ -115,7 +115,7 @@ export async function getProgramAvailability(programSlug: string): Promise<Progr
       reservedCount: activeReservations,
       remaining,
       soldOut: remaining === 0,
-      message: getAvailabilityMessage(remaining, programRecord.capacity),
+      message: getAvailabilityMessage(remaining),
     }
   } catch (error) {
     if (error instanceof Error) {
@@ -160,4 +160,4 @@ export async function createOrUpdateProgramWaitlistEntry(input: {
   }
 }
 
-export const fallbackProgram = brightBusySaturdayAcademy
+export const fallbackProgram = summerParentAndMe

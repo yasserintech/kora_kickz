@@ -37,17 +37,22 @@ export type ProgramAvailability = {
   message: string
 }
 
-export const KORAKICKZ_AGE_COPY = "KoraKickz programs are designed for children ages 2–13."
+export const KORAKICKZ_AGE_COPY = "KoraKickz soccer classes are designed for children ages 2 and up."
 
 export const TEMPORARY_WAIVER_COPY =
   "This program includes physical activities such as soccer instruction, movement drills, and general athletic training. Participation involves active physical movement and carries the possibility of bumps, falls, and other risks that can occur during youth sports."
 
+export const PHOTO_CONSENT_COPY =
+  "I give KoraKickz permission to use photos or short videos of my child taken during class for marketing, website, and social media purposes."
+
+export const CURRENT_SPRING_SESSION_LABEL = "Current class in progress"
+
 export const brightBusySaturdayAcademy: ProgramDefinition = {
   slug: "bright-busy-saturday-academy-10am",
   sport: "soccer",
-  title: "Bright & Busy Saturday Academy",
-  subtitle: "Saturday soccer training for ages 2–13 in Astoria",
-  heroTitle: "Find Your Child's Saturday Soccer Class",
+  title: "Bright & Busy Saturday Academy - 10:00 AM Class",
+  subtitle: "Current spring soccer class in Astoria",
+  heroTitle: "Find Your Child's Summer Soccer Class",
   locationName: "Bright and Busy Daycare",
   locationAddress: "33-02 30th Ave, Astoria, New York",
   dateRangeLabel: "March 14 – May 9, 2026",
@@ -61,7 +66,7 @@ export const brightBusySaturdayAcademy: ProgramDefinition = {
   registerLabel: "Register",
   checkoutHeadline: "Reserve your child's spot in Bright & Busy Saturday Academy",
   description:
-    "Bright & Busy Saturday Academy blends soccer fundamentals, confidence-building movement, and fun, structured instruction in a warm beginner-friendly environment. Families can review the schedule, add the class to their cart, create an account, and complete registration in one professional flow.",
+    "Bright & Busy Saturday Academy blends soccer fundamentals, confidence-building movement, and fun, structured instruction in a warm beginner-friendly environment.",
   bringItems: ["Athletic shirt and shorts", "Water bottle", "Indoor training shoes or sneakers"],
   waiverLabel:
     "I agree to the KoraKickz liability waiver and allow my child to participate in program activities.",
@@ -71,8 +76,8 @@ export const brightBusySaturdayAcademyLate: ProgramDefinition = {
   slug: "bright-busy-saturday-academy-11am",
   sport: "soccer",
   title: "Bright & Busy Saturday Academy - 11:00 AM Class",
-  subtitle: "Saturday soccer training for ages 2–13 in Astoria",
-  heroTitle: "Find Your Child's Saturday Soccer Class",
+  subtitle: "Current spring soccer class in Astoria",
+  heroTitle: "Find Your Child's Summer Soccer Class",
   locationName: "Bright and Busy Daycare",
   locationAddress: "33-02 30th Ave, Astoria, New York",
   dateRangeLabel: "March 14 – May 9, 2026",
@@ -86,25 +91,100 @@ export const brightBusySaturdayAcademyLate: ProgramDefinition = {
   registerLabel: "Register",
   checkoutHeadline: "Reserve your child's spot in the 11:00 AM Bright & Busy Saturday Academy class",
   description:
-    "This second Saturday soccer session gives families another time option at Bright and Busy Daycare while keeping the same format, dates, fee structure, and age range.",
+    "This second spring session gives families another Saturday option at Bright and Busy Daycare while keeping the same format and location.",
   bringItems: ["Athletic shirt and shorts", "Water bottle", "Indoor training shoes or sneakers"],
   waiverLabel:
     "I agree to the KoraKickz liability waiver and allow my child to participate in program activities.",
 }
 
-export const soccerPrograms = [brightBusySaturdayAcademy, brightBusySaturdayAcademyLate]
-
-export const brightBusySaturdayAcademyGroup: ProgramGroup = {
-  slug: "bright-busy-saturday-academy",
-  title: "Bright & Busy Saturday Academy",
+export const summerParentAndMe: ProgramDefinition = {
+  slug: "summer-soccer-parent-and-me-10am",
+  sport: "soccer",
+  title: "Parent & Me",
+  subtitle: "Summer soccer for 2s in Astoria",
+  heroTitle: "Find Your Child's Summer Soccer Class",
+  locationName: "Bright and Busy Daycare",
+  locationAddress: "33-02 30th Ave, Astoria, New York",
+  dateRangeLabel: "May 16 – August 1, 2026",
+  sessionsLabel: "12 Saturdays",
+  noClassLabel: "45-minute class",
+  timeLabel: "10:00 AM – 10:45 AM",
+  capacity: 16,
+  programFee: 260,
+  organizationFee: 0,
+  totalFee: 260,
+  registerLabel: "Register",
+  checkoutHeadline: "Reserve your child's spot in Parent & Me",
   description:
-    "Register once, then choose from the available Saturday soccer class times at Bright and Busy Daycare.",
-  programs: soccerPrograms,
+    "Parent & Me introduces two-year-olds to soccer movement, confidence, and fun with a caregiver active in the class from start to finish.",
+  bringItems: ["Athletic shirt and shorts", "Water bottle", "Indoor training shoes or sneakers"],
+  waiverLabel:
+    "I agree to the KoraKickz liability waiver and allow my child to participate in program activities.",
 }
 
-export const programs = [...soccerPrograms]
+export const summerJuniorStrikers: ProgramDefinition = {
+  slug: "summer-soccer-junior-strikers-11am",
+  sport: "soccer",
+  title: "Junior Strikers",
+  subtitle: "Summer soccer for ages 3-5 in Astoria",
+  heroTitle: "Find Your Child's Summer Soccer Class",
+  locationName: "Bright and Busy Daycare",
+  locationAddress: "33-02 30th Ave, Astoria, New York",
+  dateRangeLabel: "May 16 – August 1, 2026",
+  sessionsLabel: "12 Saturdays",
+  noClassLabel: "45-minute class",
+  timeLabel: "11:00 AM – 11:45 AM",
+  capacity: 16,
+  programFee: 285,
+  organizationFee: 0,
+  totalFee: 285,
+  registerLabel: "Register",
+  checkoutHeadline: "Reserve your child's spot in Junior Strikers",
+  description:
+    "Junior Strikers helps ages 3-5 build strong ball skills, coordination, and confidence through energetic small-group coaching.",
+  bringItems: ["Athletic shirt and shorts", "Water bottle", "Indoor training shoes or sneakers"],
+  waiverLabel:
+    "I agree to the KoraKickz liability waiver and allow my child to participate in program activities.",
+}
 
-export const programGroups = [brightBusySaturdayAcademyGroup]
+export const summerFutureStars: ProgramDefinition = {
+  slug: "summer-soccer-future-stars-12pm",
+  sport: "soccer",
+  title: "Future Stars",
+  subtitle: "Summer soccer for ages 6+ in Astoria",
+  heroTitle: "Find Your Child's Summer Soccer Class",
+  locationName: "Bright and Busy Daycare",
+  locationAddress: "33-02 30th Ave, Astoria, New York",
+  dateRangeLabel: "May 16 – August 1, 2026",
+  sessionsLabel: "12 Saturdays",
+  noClassLabel: "45-minute class",
+  timeLabel: "12:00 PM – 12:45 PM",
+  capacity: 16,
+  programFee: 285,
+  organizationFee: 0,
+  totalFee: 285,
+  registerLabel: "Register",
+  checkoutHeadline: "Reserve your child's spot in Future Stars",
+  description:
+    "Future Stars gives older players a faster-paced class focused on sharper technique, game confidence, and stronger decision-making.",
+  bringItems: ["Athletic shirt and shorts", "Water bottle", "Indoor training shoes or sneakers"],
+  waiverLabel:
+    "I agree to the KoraKickz liability waiver and allow my child to participate in program activities.",
+}
+
+export const summerSoccerPrograms = [summerParentAndMe, summerJuniorStrikers, summerFutureStars]
+
+export const summerSaturdaySoccerGroup: ProgramGroup = {
+  slug: "summer-saturday-soccer-2026",
+  title: "Summer Saturday Soccer 2026",
+  description:
+    "Choose the class that fits your child's age group. Each class is registered and paid for separately.",
+  programs: summerSoccerPrograms,
+}
+
+export const programs = [...summerSoccerPrograms, brightBusySaturdayAcademy, brightBusySaturdayAcademyLate]
+
+export const programGroups = [summerSaturdaySoccerGroup]
 
 export function getProgramBySlug(slug: string) {
   return programs.find((program) => program.slug === slug)
@@ -112,6 +192,10 @@ export function getProgramBySlug(slug: string) {
 
 export function getProgramGroupBySlug(slug: string) {
   return programGroups.find((group) => group.slug === slug)
+}
+
+export function getProgramGroupForProgramSlug(slug: string) {
+  return programGroups.find((group) => group.programs.some((program) => program.slug === slug))
 }
 
 export function formatCurrency(amount: number) {
@@ -122,27 +206,23 @@ export function formatCurrency(amount: number) {
   }).format(amount)
 }
 
-export function getAvailabilityMessage(remaining: number, capacity: number) {
+export function getAvailabilityMessage(remaining: number) {
   if (remaining <= 0) {
-    return "Sold Out"
+    return "Waitlist Open"
   }
 
-  if (remaining === 1) {
-    return "Only 1 spot left!"
+  if (remaining <= 2) {
+    return "Almost Full"
   }
 
-  if (remaining === 2) {
-    return "Only 2 spots left!"
-  }
-
-  return `Spots Remaining: ${remaining} of ${capacity}`
+  return "Open For Registration"
 }
 
 export const defaultAvailability = {
-  capacity: brightBusySaturdayAcademy.capacity,
+  capacity: summerParentAndMe.capacity,
   paidCount: 0,
   reservedCount: 0,
-  remaining: brightBusySaturdayAcademy.capacity,
+  remaining: summerParentAndMe.capacity,
   soldOut: false,
-  message: getAvailabilityMessage(brightBusySaturdayAcademy.capacity, brightBusySaturdayAcademy.capacity),
+  message: getAvailabilityMessage(summerParentAndMe.capacity),
 } satisfies ProgramAvailability

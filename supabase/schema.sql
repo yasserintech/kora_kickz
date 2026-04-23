@@ -39,6 +39,7 @@ create table if not exists public.registrations (
   child_name text not null,
   child_age integer not null,
   liability_accepted boolean not null default false,
+  photo_consent_accepted boolean not null default false,
   status text not null default 'pending_payment',
   reservation_expires_at timestamptz,
   stripe_session_id text unique,

@@ -59,21 +59,24 @@ export function GroupRegistrationPanel({ group }: Props) {
   )
 
   const allSoldOut = availablePrograms.length === 0
-  const timeLabels = group.programs.map((program) => program.timeLabel)
+  const classLabels = group.programs.map((program) => `${program.title} - ${program.timeLabel}`)
 
   return (
     <Card className="border-red-100 shadow-lg">
       <CardHeader className="space-y-3">
         <div className={`inline-flex w-fit rounded-full px-3 py-1 text-sm font-semibold ${allSoldOut ? "bg-black text-white" : "bg-red-100 text-red-700"}`}>
-          {allSoldOut ? "All Class Times Are Full" : `${availablePrograms.length} class time${availablePrograms.length > 1 ? "s" : ""} available`}
+          {allSoldOut ? "Waitlist Available" : `${availablePrograms.length} class option${availablePrograms.length > 1 ? "s" : ""} open`}
         </div>
         <CardTitle className="text-3xl">{group.title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2 text-sm text-gray-700">
           {group.programs.map((program: ProgramDefinition) => (
-            <div key={program.slug} className="flex items-center justify-between border-b pb-2">
-              <span>{program.timeLabel}</span>
+            <div key={program.slug} className="flex items-start justify-between gap-4 border-b pb-2">
+              <div>
+                <p className="font-semibold text-black">{program.title}</p>
+                <p>{program.timeLabel}</p>
+              </div>
               <span className={`font-semibold ${availabilities[program.slug]?.soldOut ? "text-black" : "text-red-600"}`}>
                 {availabilities[program.slug]?.message ?? defaultAvailability.message}
               </span>
@@ -87,7 +90,7 @@ export function GroupRegistrationPanel({ group }: Props) {
               <Link href={`/register?group=${group.slug}`}>Register</Link>
             </Button>
             <p className="text-sm text-gray-600">
-              Choose from the currently available class times after clicking register.
+              Choose the class you want to register for after clicking register.
             </p>
           </div>
         ) : (
@@ -102,7 +105,7 @@ export function GroupRegistrationPanel({ group }: Props) {
               Join Waitlist
             </Button>
             <p className="text-sm text-gray-600">
-              There are no available class times right now. Choose the class time or times you want to waitlist for.
+              All class options are currently full. Choose the class or classes you want to join the waitlist for.
             </p>
           </div>
         )}
@@ -110,8 +113,8 @@ export function GroupRegistrationPanel({ group }: Props) {
         {showWaitlist ? (
           <WaitlistForm
             programSlug={group.programs[0].slug}
-            requestedTimes={timeLabels}
-            title="Join the waitlist for your preferred class time(s)"
+            requestedTimes={classLabels}
+            title="Join the waitlist for your preferred class option(s)"
           />
         ) : null}
       </CardContent>

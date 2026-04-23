@@ -76,10 +76,12 @@ export function ProgramAvailabilityPanel({ program, initialAvailability = defaul
             <span>Program Fee</span>
             <span className="font-semibold">${program.programFee}</span>
           </div>
-          <div className="flex items-center justify-between border-b pb-3">
-            <span>Organization &amp; Management Fee</span>
-            <span className="font-semibold">${program.organizationFee}</span>
-          </div>
+          {program.organizationFee > 0 ? (
+            <div className="flex items-center justify-between border-b pb-3">
+              <span>Organization &amp; Management Fee</span>
+              <span className="font-semibold">${program.organizationFee}</span>
+            </div>
+          ) : null}
           <div className="flex items-center justify-between text-base font-semibold text-black">
             <span>Total</span>
             <span>${program.totalFee}</span>

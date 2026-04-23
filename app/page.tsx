@@ -62,7 +62,7 @@ export default function Home() {
                     <Link href="/soccer">Learn More</Link>
                   </Button>
                   <Button asChild variant="outline" className="w-full">
-                    <Link href="/soccer/find-my-class">Find My Class</Link>
+                    <Link href="/soccer/registration">View Registration</Link>
                   </Button>
                 </div>
               </div>

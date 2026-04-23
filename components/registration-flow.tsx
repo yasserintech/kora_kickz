@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getSupabaseBrowserClient } from "@/lib/supabase"
 import {
+  PHOTO_CONSENT_COPY,
   TEMPORARY_WAIVER_COPY,
   defaultAvailability,
   type ProgramAvailability,
@@ -43,6 +44,7 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
   const [childName, setChildName] = useState("")
   const [childAge, setChildAge] = useState("")
   const [waiverAccepted, setWaiverAccepted] = useState(false)
+  const [photoConsentAccepted, setPhotoConsentAccepted] = useState(false)
   const [loadError, setLoadError] = useState("")
 
   const cancelled = searchParams.get("cancelled") === "1"
@@ -173,6 +175,10 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
         throw new Error("You must agree to the liability waiver before continuing.")
       }
 
+      if (!photoConsentAccepted) {
+        throw new Error("You must agree to the picture consent before continuing.")
+      }
+
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: {
@@ -188,6 +194,7 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
           childName,
           childAge,
           waiverAccepted,
+          photoConsentAccepted,
         }),
       })
 
@@ -223,10 +230,12 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
                 <span>Program Fee</span>
                 <span className="font-semibold">${program.programFee}</span>
               </div>
-              <div className="flex items-center justify-between border-b pb-2">
-                <span>Organization &amp; Management Fee</span>
-                <span className="font-semibold">${program.organizationFee}</span>
-              </div>
+              {program.organizationFee > 0 ? (
+                <div className="flex items-center justify-between border-b pb-2">
+                  <span>Organization &amp; Management Fee</span>
+                  <span className="font-semibold">${program.organizationFee}</span>
+                </div>
+              ) : null}
               <div className="flex items-center justify-between text-base font-semibold text-black">
                 <span>Total</span>
                 <span>${program.totalFee}</span>
@@ -292,7 +301,7 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
 
         <Card className="border-red-100 shadow-sm">
           <CardHeader>
-            <CardTitle className="text-2xl">Steps 3–6: Parent, Child, Waiver, And Payment</CardTitle>
+            <CardTitle className="text-2xl">Steps 3–8: Parent, Child, Consent, And Payment</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleCheckout} className="space-y-6">
@@ -354,7 +363,7 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
               </div>
 
               <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-                <h3 className="text-lg font-semibold text-black">Liability Waiver and Participation Agreement</h3>
+                <h3 className="text-lg font-semibold text-black">Liability Waiver and Photo Consent</h3>
                 <p className="mt-2 text-sm text-gray-700">{TEMPORARY_WAIVER_COPY}</p>
                 <div className="mt-4 flex items-start gap-3">
                   <Checkbox
@@ -364,6 +373,16 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
                   />
                   <Label htmlFor="waiver" className="text-sm leading-6 text-gray-700">
                     {program.waiverLabel}
+                  </Label>
+                </div>
+                <div className="mt-4 flex items-start gap-3">
+                  <Checkbox
+                    id="photo-consent"
+                    checked={photoConsentAccepted}
+                    onCheckedChange={(checked) => setPhotoConsentAccepted(Boolean(checked))}
+                  />
+                  <Label htmlFor="photo-consent" className="text-sm leading-6 text-gray-700">
+                    {PHOTO_CONSENT_COPY}
                   </Label>
                 </div>
               </div>
@@ -426,8 +445,9 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
               <p>3. Create an account or log in</p>
               <p>4. Fill out parent and child information</p>
               <p>5. Agree to the liability waiver</p>
-              <p>6. Pay the $190 total fee</p>
-              <p>7. Receive confirmation</p>
+              <p>6. Agree to the picture consent</p>
+              <p>{`7. Pay the $${program.totalFee} total fee`}</p>
+              <p>8. Receive confirmation</p>
             </div>
           </CardContent>
         </Card>
@@ -439,7 +459,7 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-gray-700">
-                The class is currently full. Join the waiting list and we will contact you if a spot opens.
+                This class is currently full. Join the waiting list and we will contact you if a spot opens.
               </p>
               <WaitlistForm
                 programSlug={program.slug}
@@ -452,8 +472,8 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
 
         <p className="text-sm text-gray-600">
           Need to review the class first? Visit{" "}
-          <Link href="/soccer/find-my-class" className="font-semibold text-red-600 underline-offset-4 hover:underline">
-            Soccer → Find My Class
+          <Link href="/soccer/registration" className="font-semibold text-red-600 underline-offset-4 hover:underline">
+            Soccer → Registration
           </Link>
           .
         </p>

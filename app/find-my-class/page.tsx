@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button"
 const sportChoices = [
   {
     name: "Soccer",
-    description: "Currently open for registration with two Saturday class times available.",
-    href: "/soccer/find-my-class",
+    description: "Currently open for registration with three Saturday class options available.",
+    href: "/soccer/registration",
     available: true,
   },
   {

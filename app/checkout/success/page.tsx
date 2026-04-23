@@ -16,7 +16,7 @@ export default function CheckoutSuccessPage() {
               <Link href="/account">Go To My Dashboard</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/soccer/find-my-class">View Class Details</Link>
+              <Link href="/soccer/registration">View Registration</Link>
             </Button>
           </div>
         </div>
