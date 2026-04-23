@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { getBaseUrl, getStripeClient } from "@/lib/stripe"
+import { getHydratedProgramBySlug, getProgramAvailability } from "@/lib/program-service"
 import { getAuthenticatedUser, getSupabaseServiceClient } from "@/lib/supabase"
-import { ensureProgramRecord, getProgramAvailability } from "@/lib/program-service"
-import { getProgramBySlug } from "@/lib/programs"
 
 const checkoutSchema = z.object({
   programSlug: z.string().min(1),
@@ -28,7 +27,7 @@ export async function POST(request: Request) {
     const accessToken = authorization.replace("Bearer ", "")
     const user = await getAuthenticatedUser(accessToken)
     const body = checkoutSchema.parse(await request.json())
-    const program = getProgramBySlug(body.programSlug)
+    const program = await getHydratedProgramBySlug(body.programSlug)
 
     if (!program) {
       return NextResponse.json({ error: "Program not found." }, { status: 404 })
@@ -41,7 +40,16 @@ export async function POST(request: Request) {
     }
 
     const supabase = getSupabaseServiceClient()
-    const programRecord = await ensureProgramRecord(program)
+    const { data: programRecord, error: programRecordError } = await supabase
+      .from("programs")
+      .select("id")
+      .eq("slug", program.slug)
+      .single<{ id: string }>()
+
+    if (programRecordError) {
+      throw programRecordError
+    }
+
     const reservationExpiresAt = new Date(Date.now() + 30 * 60 * 1000).toISOString()
 
     const { error: profileError } = await supabase.from("parent_profiles").upsert({
@@ -122,25 +130,11 @@ export async function POST(request: Request) {
           price_data: {
             currency: "usd",
             product_data: {
-              name: `${program.title} Program Fee`,
+              name: program.title,
             },
-            unit_amount: program.programFee * 100,
+            unit_amount: program.totalFee * 100,
           },
         },
-        ...(program.organizationFee > 0
-          ? [
-              {
-                quantity: 1,
-                price_data: {
-                  currency: "usd",
-                  product_data: {
-                    name: "Organization & Management Fee",
-                  },
-                  unit_amount: program.organizationFee * 100,
-                },
-              },
-            ]
-          : []),
       ],
     })
 

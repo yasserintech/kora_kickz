@@ -125,6 +125,9 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
         const { data, error } = await supabase.auth.signUp({
           email: parentEmail,
           password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/account`,
+          },
         })
 
         if (error) {
@@ -132,7 +135,7 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
         }
 
         if (!data.session) {
-          setAuthMessage("Your account was created. If email confirmation is enabled in Supabase, confirm your email and then log in to continue.")
+          setAuthMessage("We’ve sent you a confirmation email. Please verify your account, then log in to finish registration.")
         } else {
           setLoggedInEmail(data.user?.email ?? parentEmail)
           setAuthMessage("Account created. You can continue with registration below.")

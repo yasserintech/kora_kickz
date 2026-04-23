@@ -1,9 +1,12 @@
 import { notFound } from "next/navigation"
 import { ClassTimeSelection } from "@/components/class-time-selection"
 import { RegistrationFlow } from "@/components/registration-flow"
-import { defaultAvailability, getProgramBySlug, getProgramGroupBySlug, getProgramGroupForProgramSlug } from "@/lib/programs"
+import { defaultAvailability, getProgramGroupForProgramSlug } from "@/lib/programs"
+import { getHydratedProgramBySlug, getHydratedProgramGroupBySlug } from "@/lib/program-service"
 
-export default function RegisterPage({
+export const dynamic = "force-dynamic"
+
+export default async function RegisterPage({
   searchParams,
 }: {
   searchParams: { program?: string; group?: string }
@@ -15,7 +18,7 @@ export default function RegisterPage({
   }
 
   if (groupSlug) {
-    const group = getProgramGroupBySlug(groupSlug)
+    const group = await getHydratedProgramGroupBySlug(groupSlug)
 
     if (!group) {
       notFound()
@@ -35,7 +38,7 @@ export default function RegisterPage({
     )
   }
 
-  const program = getProgramBySlug(programSlug as string)
+  const program = await getHydratedProgramBySlug(programSlug as string)
 
   if (!program) {
     notFound()

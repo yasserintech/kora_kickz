@@ -1,10 +1,12 @@
 import {
+  DEFAULT_BRING_ITEMS,
+  DEFAULT_WAIVER_LABEL,
   defaultAvailability,
   getAvailabilityMessage,
-  getProgramBySlug,
-  summerParentAndMe,
+  getProgramGroupBySlug,
   type ProgramAvailability,
   type ProgramDefinition,
+  type ProgramGroup,
 } from "@/lib/programs"
 import { hasSupabaseEnv } from "@/lib/env"
 import { getSupabaseServiceClient } from "@/lib/supabase"
@@ -31,46 +33,73 @@ type RegistrationRecord = {
   reservation_expires_at: string | null
 }
 
-function mapProgramToRow(program: ProgramDefinition) {
+function buildProgramFromRecord(record: ProgramRecord): ProgramDefinition {
   return {
-    slug: program.slug,
-    title: program.title,
-    sport: program.sport,
-    capacity: program.capacity,
-    program_fee: program.programFee,
-    organization_fee: program.organizationFee,
-    total_fee: program.totalFee,
-    date_range_label: program.dateRangeLabel,
-    sessions_label: program.sessionsLabel,
-    no_class_label: program.noClassLabel,
-    time_label: program.timeLabel,
-    location_name: program.locationName,
-    location_address: program.locationAddress,
+    slug: record.slug,
+    sport: "soccer",
+    title: record.title,
+    subtitle: `${record.title} soccer class in Astoria`,
+    heroTitle: "Find Your Child's Soccer Class",
+    locationName: record.location_name,
+    locationAddress: record.location_address,
+    dateRangeLabel: record.date_range_label,
+    sessionsLabel: record.sessions_label,
+    noClassLabel: record.no_class_label,
+    timeLabel: record.time_label,
+    capacity: record.capacity,
+    programFee: record.program_fee,
+    organizationFee: record.organization_fee,
+    totalFee: record.total_fee,
+    registerLabel: "Register",
+    checkoutHeadline: `Reserve your child's spot in ${record.title}`,
+    description: `${record.title} gives families a clear soccer class option with structured instruction, age-appropriate coaching, and a smooth online registration flow.`,
+    bringItems: DEFAULT_BRING_ITEMS,
+    waiverLabel: DEFAULT_WAIVER_LABEL,
   }
 }
 
-export async function ensureProgramRecord(program: ProgramDefinition) {
+async function getProgramRecordBySlug(slug: string): Promise<ProgramRecord | null> {
   if (!hasSupabaseEnv()) {
-    throw new Error("Supabase environment variables are not configured.")
+    return null
   }
 
   const supabase = getSupabaseServiceClient()
-  const payload = mapProgramToRow(program)
-  const { data, error } = await supabase
-    .from("programs")
-    .upsert(payload, { onConflict: "slug" })
-    .select("*")
-    .single()
+  const { data, error } = await supabase.from("programs").select("*").eq("slug", slug).maybeSingle()
 
   if (error) {
     throw error
   }
 
-  return data as ProgramRecord
+  return data as ProgramRecord | null
+}
+
+export async function getHydratedProgramBySlug(programSlug: string) {
+  const record = await getProgramRecordBySlug(programSlug)
+
+  if (!record) {
+    return null
+  }
+
+  return buildProgramFromRecord(record)
+}
+
+export async function getHydratedProgramGroupBySlug(groupSlug: string): Promise<ProgramGroup | null> {
+  const group = getProgramGroupBySlug(groupSlug)
+
+  if (!group) {
+    return null
+  }
+
+  const programs = await Promise.all(group.programSlugs.map((slug) => getHydratedProgramBySlug(slug)))
+
+  return {
+    ...group,
+    programs: programs.filter((program): program is ProgramDefinition => program !== null),
+  }
 }
 
 export async function getProgramAvailability(programSlug: string): Promise<ProgramAvailability> {
-  const program = getProgramBySlug(programSlug)
+  const program = await getHydratedProgramBySlug(programSlug)
 
   if (!program) {
     throw new Error("Program not found.")
@@ -82,7 +111,12 @@ export async function getProgramAvailability(programSlug: string): Promise<Progr
 
   try {
     const supabase = getSupabaseServiceClient()
-    const programRecord = await ensureProgramRecord(program)
+    const programRecord = await getProgramRecordBySlug(program.slug)
+
+    if (!programRecord) {
+      throw new Error("Program record not found.")
+    }
+
     const { data, error } = await supabase
       .from("registrations")
       .select("status,reservation_expires_at")
@@ -135,17 +169,16 @@ export async function createOrUpdateProgramWaitlistEntry(input: {
   email: string
   requestedTimes: string[]
 }) {
-  const program = getProgramBySlug(input.programSlug)
+  const programRecord = await getProgramRecordBySlug(input.programSlug)
 
-  if (!program) {
+  if (!programRecord) {
     throw new Error("Program not found.")
   }
 
   const supabase = getSupabaseServiceClient()
-  const programRecord = await ensureProgramRecord(program)
   const payload = {
     program_id: programRecord.id,
-    program_slug: program.slug,
+    program_slug: programRecord.slug,
     parent_name: input.parentName,
     email: input.email.toLowerCase(),
     requested_time_labels: input.requestedTimes,
@@ -159,5 +192,3 @@ export async function createOrUpdateProgramWaitlistEntry(input: {
     throw error
   }
 }
-
-export const fallbackProgram = summerParentAndMe
