@@ -167,9 +167,22 @@ export function ParentDashboard() {
     setAuthMessage("")
 
     try {
+      const {
+        data: { session: existingSession },
+      } = await supabase.auth.getSession()
+
+      const normalizedEmail = email.trim().toLowerCase()
+      const existingEmail = existingSession?.user.email?.toLowerCase() ?? ""
+
+      if (existingSession?.user && existingEmail && existingEmail !== normalizedEmail) {
+        await supabase.auth.signOut()
+        setLoggedInEmail("")
+        setDashboard(null)
+      }
+
       if (authMode === "signup") {
         const { data, error } = await supabase.auth.signUp({
-          email,
+          email: normalizedEmail,
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/account`,
@@ -181,15 +194,16 @@ export function ParentDashboard() {
         }
 
         if (!data.session) {
-          setAuthMessage("Your account was created. If email confirmation is enabled, confirm your email and then log in.")
+          setLoggedInEmail("")
+          setAuthMessage("We’ve sent you a confirmation email. Please verify your account, then log in to finish registration.")
         } else {
-          setLoggedInEmail(data.user?.email ?? email)
+          setLoggedInEmail(data.user?.email ?? normalizedEmail)
           await loadDashboard(data.session.access_token)
           setAuthMessage("Account created successfully.")
         }
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({
-          email,
+          email: normalizedEmail,
           password,
         })
 
@@ -202,6 +216,8 @@ export function ParentDashboard() {
         setAuthMessage("Signed in successfully.")
       }
     } catch (error) {
+      setLoggedInEmail("")
+      setDashboard(null)
       setAuthError(error instanceof Error ? error.message : "Unable to authenticate.")
     } finally {
       setAuthLoading(false)

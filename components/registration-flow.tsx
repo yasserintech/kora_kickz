@@ -121,9 +121,21 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
     setAuthMessage("")
 
     try {
+      const {
+        data: { session: existingSession },
+      } = await supabase.auth.getSession()
+
+      const normalizedEmail = parentEmail.trim().toLowerCase()
+      const existingEmail = existingSession?.user.email?.toLowerCase() ?? ""
+
+      if (existingSession?.user && existingEmail && existingEmail !== normalizedEmail) {
+        await supabase.auth.signOut()
+        setLoggedInEmail("")
+      }
+
       if (authMode === "signup") {
         const { data, error } = await supabase.auth.signUp({
-          email: parentEmail,
+          email: normalizedEmail,
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/account`,
@@ -135,14 +147,15 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
         }
 
         if (!data.session) {
+          setLoggedInEmail("")
           setAuthMessage("We’ve sent you a confirmation email. Please verify your account, then log in to finish registration.")
         } else {
-          setLoggedInEmail(data.user?.email ?? parentEmail)
+          setLoggedInEmail(data.user?.email ?? normalizedEmail)
           setAuthMessage("Account created. You can continue with registration below.")
         }
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({
-          email: parentEmail,
+          email: normalizedEmail,
           password,
         })
 
@@ -154,6 +167,7 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
         setAuthMessage("You are logged in and ready to check out.")
       }
     } catch (error) {
+      setLoggedInEmail("")
       setAuthError(error instanceof Error ? error.message : "Unable to authenticate.")
     } finally {
       setAuthLoading(false)
