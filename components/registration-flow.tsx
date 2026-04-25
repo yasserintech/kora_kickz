@@ -12,7 +12,9 @@ import { getSupabaseBrowserClient } from "@/lib/supabase"
 import {
   PHOTO_CONSENT_COPY,
   TEMPORARY_WAIVER_COPY,
+  UNAVAILABLE_AVAILABILITY_MESSAGE,
   defaultAvailability,
+  unavailableAvailability,
   type ProgramAvailability,
   type ProgramDefinition,
 } from "@/lib/programs"
@@ -90,6 +92,9 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
         })
 
         if (!response.ok) {
+          if (active) {
+            setAvailability(unavailableAvailability)
+          }
           return
         }
 
@@ -98,8 +103,10 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
         if (active) {
           setAvailability(data)
         }
-      } catch (error) {
-        console.error(error)
+      } catch {
+        if (active) {
+          setAvailability(unavailableAvailability)
+        }
       }
     }
 
@@ -408,12 +415,15 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
                 type="submit"
                 size="lg"
                 className="w-full bg-red-600 hover:bg-red-700"
-                disabled={!sessionReady || !loggedInEmail || checkoutLoading || availability.soldOut}
+                disabled={!sessionReady || !loggedInEmail || checkoutLoading || availability.soldOut || availability.message === UNAVAILABLE_AVAILABILITY_MESSAGE}
               >
                 {checkoutLoading ? "Redirecting To Checkout..." : `Pay $${program.totalFee} And Complete Registration`}
               </Button>
 
               {checkoutError ? <p className="text-sm text-red-600">{checkoutError}</p> : null}
+              {availability.message === UNAVAILABLE_AVAILABILITY_MESSAGE ? (
+                <p className="text-sm text-red-600">Registration is temporarily unavailable. Please try again later.</p>
+              ) : null}
               {!loggedInEmail ? <p className="text-sm text-gray-600">Create an account or log in first to unlock checkout.</p> : null}
             </form>
           </CardContent>
@@ -426,7 +436,7 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
             <CardTitle className="text-2xl">Registration Summary</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-sm text-gray-700">
-            <div className={`inline-flex rounded-full px-3 py-1 font-semibold ${availability.soldOut ? "bg-black text-white" : availability.remaining <= 2 ? "bg-red-600 text-white" : "bg-red-100 text-red-700"}`}>
+            <div className={`inline-flex rounded-full px-3 py-1 font-semibold ${availability.message === UNAVAILABLE_AVAILABILITY_MESSAGE ? "bg-gray-200 text-gray-700" : availability.soldOut ? "bg-black text-white" : availability.remaining <= 2 ? "bg-red-600 text-white" : "bg-red-100 text-red-700"}`}>
               {availability.message}
             </div>
             <div>
@@ -469,7 +479,7 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
           </CardContent>
         </Card>
 
-        {availability.soldOut ? (
+        {availability.soldOut && availability.message !== UNAVAILABLE_AVAILABILITY_MESSAGE ? (
           <Card className="border-red-100 shadow-sm">
             <CardHeader>
               <CardTitle className="text-2xl">Waiting List</CardTitle>

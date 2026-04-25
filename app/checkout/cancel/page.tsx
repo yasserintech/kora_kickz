@@ -13,7 +13,7 @@ export default function CheckoutCancelPage() {
           </p>
           <div className="mt-8 flex justify-center">
             <Button asChild className="bg-red-600 hover:bg-red-700">
-              <Link href="/register?program=bright-busy-saturday-academy">Back To Registration</Link>
+              <Link href="/soccer/registration">Back To Registration</Link>
             </Button>
           </div>
         </div>

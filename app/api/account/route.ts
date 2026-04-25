@@ -60,15 +60,13 @@ export async function GET(request: Request) {
       throw registrationsError
     }
 
-    const userEmail = (profile?.email || user.email || "").toLowerCase()
     const waitlistQuery = supabase
       .from("waitlist_entries")
       .select("id,parent_name,email,requested_time_labels,created_at,programs(title,date_range_label)")
+      .eq("user_id", user.id)
       .order("created_at", { ascending: false })
 
-    const { data: waitlistEntries, error: waitlistError } = userEmail
-      ? await waitlistQuery.eq("email", userEmail)
-      : await waitlistQuery.limit(0)
+    const { data: waitlistEntries, error: waitlistError } = await waitlistQuery
 
     if (waitlistError) {
       throw waitlistError

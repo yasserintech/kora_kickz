@@ -5,7 +5,13 @@ import { useEffect, useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { WaitlistForm } from "@/components/waitlist-form"
-import { defaultAvailability, type ProgramAvailability, type ProgramDefinition } from "@/lib/programs"
+import {
+  UNAVAILABLE_AVAILABILITY_MESSAGE,
+  defaultAvailability,
+  unavailableAvailability,
+  type ProgramAvailability,
+  type ProgramDefinition,
+} from "@/lib/programs"
 
 type Props = {
   program: ProgramDefinition
@@ -27,6 +33,10 @@ export function ProgramAvailabilityPanel({ program, initialAvailability = defaul
         })
 
         if (!response.ok) {
+          if (active) {
+            setAvailability(unavailableAvailability)
+            setShowWaitlist(false)
+          }
           return
         }
 
@@ -36,8 +46,11 @@ export function ProgramAvailabilityPanel({ program, initialAvailability = defaul
           setAvailability(data)
           setShowWaitlist(data.soldOut)
         }
-      } catch (error) {
-        console.error(error)
+      } catch {
+        if (active) {
+          setAvailability(unavailableAvailability)
+          setShowWaitlist(false)
+        }
       }
     }
 
@@ -53,6 +66,10 @@ export function ProgramAvailabilityPanel({ program, initialAvailability = defaul
   const badgeTone = useMemo(() => {
     if (availability.soldOut) {
       return "bg-black text-white"
+    }
+
+    if (availability.message === UNAVAILABLE_AVAILABILITY_MESSAGE) {
+      return "bg-gray-200 text-gray-700"
     }
 
     if (availability.remaining <= 2) {
@@ -88,7 +105,14 @@ export function ProgramAvailabilityPanel({ program, initialAvailability = defaul
           </div>
         </div>
 
-        {!availability.soldOut ? (
+        {availability.message === UNAVAILABLE_AVAILABILITY_MESSAGE ? (
+          <div className="space-y-3">
+            <Button type="button" size="lg" className="w-full" disabled>
+              Temporarily Unavailable
+            </Button>
+            <p className="text-sm text-gray-600">Registration is temporarily unavailable. Please try again later.</p>
+          </div>
+        ) : !availability.soldOut ? (
           <div className="space-y-3">
             <Button asChild size="lg" className="w-full bg-red-600 hover:bg-red-700">
               <Link href={`/register?program=${program.slug}`}>{program.registerLabel}</Link>
@@ -114,7 +138,7 @@ export function ProgramAvailabilityPanel({ program, initialAvailability = defaul
           </div>
         )}
 
-        {showWaitlist ? <WaitlistForm programSlug={program.slug} /> : null}
+        {showWaitlist && availability.message !== UNAVAILABLE_AVAILABILITY_MESSAGE ? <WaitlistForm programSlug={program.slug} /> : null}
       </CardContent>
     </Card>
   )

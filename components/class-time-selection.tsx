@@ -5,7 +5,13 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { WaitlistForm } from "@/components/waitlist-form"
-import { defaultAvailability, type ProgramAvailability, type ProgramGroup } from "@/lib/programs"
+import {
+  UNAVAILABLE_AVAILABILITY_MESSAGE,
+  defaultAvailability,
+  unavailableAvailability,
+  type ProgramAvailability,
+  type ProgramGroup,
+} from "@/lib/programs"
 
 type Props = {
   group: ProgramGroup
@@ -28,7 +34,7 @@ export function ClassTimeSelection({ group }: Props) {
             })
 
             if (!response.ok) {
-              return [program.slug, defaultAvailability] as const
+              return [program.slug, unavailableAvailability] as const
             }
 
             return [program.slug, (await response.json()) as ProgramAvailability] as const
@@ -38,8 +44,10 @@ export function ClassTimeSelection({ group }: Props) {
         if (active) {
           setAvailabilities(Object.fromEntries(responses))
         }
-      } catch (error) {
-        console.error(error)
+      } catch {
+        if (active) {
+          setAvailabilities(Object.fromEntries(group.programs.map((program) => [program.slug, unavailableAvailability])))
+        }
       }
     }
 
@@ -50,14 +58,21 @@ export function ClassTimeSelection({ group }: Props) {
     }
   }, [group.programs])
 
-  const hasOpenTime = group.programs.some((program) => !availabilities[program.slug]?.soldOut)
+  const hasUnavailableTime = group.programs.some(
+    (program) => availabilities[program.slug]?.message === UNAVAILABLE_AVAILABILITY_MESSAGE
+  )
+  const hasOpenTime = group.programs.some(
+    (program) => !availabilities[program.slug]?.soldOut && availabilities[program.slug]?.message !== UNAVAILABLE_AVAILABILITY_MESSAGE
+  )
 
   return (
     <div className="space-y-8">
       {!hasOpenTime ? (
         <Card className="border-red-100 shadow-sm">
           <CardContent className="p-6 text-sm text-gray-700">
-            All class options are currently full. You can join the waitlist for a specific class below.
+            {hasUnavailableTime
+              ? "Registration is temporarily unavailable. Please try again later."
+              : "All class options are currently full. You can join the waitlist for a specific class below."}
           </CardContent>
         </Card>
       ) : null}
@@ -69,7 +84,7 @@ export function ClassTimeSelection({ group }: Props) {
           return (
             <Card key={program.slug} className="border-red-100 shadow-sm">
               <CardHeader className="space-y-3">
-                <div className={`inline-flex w-fit rounded-full px-3 py-1 text-sm font-semibold ${availability.soldOut ? "bg-black text-white" : availability.remaining <= 2 ? "bg-red-600 text-white" : "bg-red-100 text-red-700"}`}>
+                <div className={`inline-flex w-fit rounded-full px-3 py-1 text-sm font-semibold ${availability.message === UNAVAILABLE_AVAILABILITY_MESSAGE ? "bg-gray-200 text-gray-700" : availability.soldOut ? "bg-black text-white" : availability.remaining <= 2 ? "bg-red-600 text-white" : "bg-red-100 text-red-700"}`}>
                   {availability.message}
                 </div>
                 <CardTitle className="text-2xl">{program.title}</CardTitle>
@@ -93,7 +108,11 @@ export function ClassTimeSelection({ group }: Props) {
                   <span>${program.totalFee}</span>
                 </div>
 
-                {!availability.soldOut ? (
+                {availability.message === UNAVAILABLE_AVAILABILITY_MESSAGE ? (
+                  <Button type="button" className="w-full" disabled>
+                    Temporarily Unavailable
+                  </Button>
+                ) : !availability.soldOut ? (
                   <Button asChild className="w-full bg-red-600 hover:bg-red-700">
                     <Link href={`/register?program=${program.slug}`}>Choose This Class</Link>
                   </Button>

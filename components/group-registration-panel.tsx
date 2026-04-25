@@ -5,7 +5,14 @@ import { useEffect, useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { WaitlistForm } from "@/components/waitlist-form"
-import { defaultAvailability, type ProgramAvailability, type ProgramDefinition, type ProgramGroup } from "@/lib/programs"
+import {
+  UNAVAILABLE_AVAILABILITY_MESSAGE,
+  defaultAvailability,
+  unavailableAvailability,
+  type ProgramAvailability,
+  type ProgramDefinition,
+  type ProgramGroup,
+} from "@/lib/programs"
 
 type Props = {
   group: ProgramGroup
@@ -29,7 +36,7 @@ export function GroupRegistrationPanel({ group }: Props) {
             })
 
             if (!response.ok) {
-              return [program.slug, defaultAvailability] as const
+              return [program.slug, unavailableAvailability] as const
             }
 
             return [program.slug, (await response.json()) as ProgramAvailability] as const
@@ -39,8 +46,10 @@ export function GroupRegistrationPanel({ group }: Props) {
         if (active) {
           setAvailabilities(Object.fromEntries(responses))
         }
-      } catch (error) {
-        console.error(error)
+      } catch {
+        if (active) {
+          setAvailabilities(Object.fromEntries(group.programs.map((program) => [program.slug, unavailableAvailability])))
+        }
       }
     }
 
@@ -54,18 +63,27 @@ export function GroupRegistrationPanel({ group }: Props) {
   }, [group.programs])
 
   const availablePrograms = useMemo(
-    () => group.programs.filter((program) => !availabilities[program.slug]?.soldOut),
+    () =>
+      group.programs.filter(
+        (program) => !availabilities[program.slug]?.soldOut && availabilities[program.slug]?.message !== UNAVAILABLE_AVAILABILITY_MESSAGE
+      ),
     [availabilities, group.programs]
   )
 
   const allSoldOut = availablePrograms.length === 0
-  const classLabels = group.programs.map((program) => `${program.title} - ${program.timeLabel}`)
+  const hasUnavailablePrograms = group.programs.some(
+    (program) => availabilities[program.slug]?.message === UNAVAILABLE_AVAILABILITY_MESSAGE
+  )
+  const waitlistOptions = group.programs.map((program) => ({
+    programSlug: program.slug,
+    label: `${program.title} - ${program.timeLabel}`,
+  }))
 
   return (
     <Card className="border-red-100 shadow-lg">
       <CardHeader className="space-y-3">
-        <div className={`inline-flex w-fit rounded-full px-3 py-1 text-sm font-semibold ${allSoldOut ? "bg-black text-white" : "bg-red-100 text-red-700"}`}>
-          {allSoldOut ? "Waitlist Available" : `${availablePrograms.length} class option${availablePrograms.length > 1 ? "s" : ""} open`}
+        <div className={`inline-flex w-fit rounded-full px-3 py-1 text-sm font-semibold ${hasUnavailablePrograms ? "bg-gray-200 text-gray-700" : allSoldOut ? "bg-black text-white" : "bg-red-100 text-red-700"}`}>
+          {hasUnavailablePrograms ? "Registration Unavailable" : allSoldOut ? "Waitlist Available" : `${availablePrograms.length} class option${availablePrograms.length > 1 ? "s" : ""} open`}
         </div>
         <CardTitle className="text-3xl">{group.title}</CardTitle>
       </CardHeader>
@@ -77,14 +95,16 @@ export function GroupRegistrationPanel({ group }: Props) {
                 <p className="font-semibold text-black">{program.title}</p>
                 <p>{program.timeLabel}</p>
               </div>
-              <span className={`font-semibold ${availabilities[program.slug]?.soldOut ? "text-black" : "text-red-600"}`}>
+              <span className={`font-semibold ${availabilities[program.slug]?.message === UNAVAILABLE_AVAILABILITY_MESSAGE ? "text-gray-600" : availabilities[program.slug]?.soldOut ? "text-black" : "text-red-600"}`}>
                 {availabilities[program.slug]?.message ?? defaultAvailability.message}
               </span>
             </div>
           ))}
         </div>
 
-        {!allSoldOut ? (
+        {hasUnavailablePrograms ? (
+          <p className="text-sm text-gray-600">Registration is temporarily unavailable. Please try again later.</p>
+        ) : !allSoldOut ? (
           <div className="space-y-3">
             <Button asChild size="lg" className="w-full bg-red-600 hover:bg-red-700">
               <Link href={`/register?group=${group.slug}`}>Register</Link>
@@ -110,10 +130,10 @@ export function GroupRegistrationPanel({ group }: Props) {
           </div>
         )}
 
-        {showWaitlist ? (
+        {showWaitlist && !hasUnavailablePrograms ? (
           <WaitlistForm
-            programSlug={group.programs[0].slug}
-            requestedTimes={classLabels}
+            programSlug={group.slug}
+            requestedOptions={waitlistOptions}
             title="Join the waitlist for your preferred class option(s)"
           />
         ) : null}

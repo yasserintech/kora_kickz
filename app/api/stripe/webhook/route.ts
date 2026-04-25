@@ -26,6 +26,33 @@ export async function POST(request: Request) {
       const registrationId = session.metadata?.registrationId
 
       if (registrationId) {
+        if (session.payment_status !== "paid") {
+          return NextResponse.json({ received: true })
+        }
+
+        const { data: registration, error: registrationError } = await supabase
+          .from("registrations")
+          .select("id,total_fee,status")
+          .eq("id", registrationId)
+          .eq("stripe_session_id", session.id)
+          .maybeSingle<{ id: string; total_fee: number; status: string }>()
+
+        if (registrationError) {
+          throw registrationError
+        }
+
+        if (!registration) {
+          throw new Error("Matching registration not found for completed Stripe session.")
+        }
+
+        if (session.currency !== "usd" || session.amount_total !== registration.total_fee * 100) {
+          throw new Error("Stripe checkout total did not match the stored registration total.")
+        }
+
+        if (registration.status === "paid") {
+          return NextResponse.json({ received: true })
+        }
+
         const { error } = await supabase
           .from("registrations")
           .update({
@@ -53,6 +80,8 @@ export async function POST(request: Request) {
             status: "expired",
           })
           .eq("id", registrationId)
+          .eq("stripe_session_id", session.id)
+          .eq("status", "pending_payment")
 
         if (error) {
           throw error

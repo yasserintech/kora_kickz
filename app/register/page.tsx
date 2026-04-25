@@ -9,9 +9,9 @@ export const dynamic = "force-dynamic"
 export default async function RegisterPage({
   searchParams,
 }: {
-  searchParams: { program?: string; group?: string }
+  searchParams: Promise<{ program?: string; group?: string }>
 }) {
-  const { program: programSlug, group: groupSlug } = searchParams
+  const { program: programSlug, group: groupSlug } = await searchParams
 
   if (!programSlug && !groupSlug) {
     notFound()

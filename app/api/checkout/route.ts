@@ -28,12 +28,27 @@ export async function POST(request: Request) {
     const user = await getAuthenticatedUser(accessToken)
     const body = checkoutSchema.parse(await request.json())
     const program = await getHydratedProgramBySlug(body.programSlug)
+    const verifiedEmail = user.email?.trim().toLowerCase()
+    const normalizedChildName = body.childName.trim()
+    const normalizedParentFirstName = body.parentFirstName.trim()
+    const normalizedParentLastName = body.parentLastName.trim()
+    const normalizedPhoneNumber = body.phoneNumber.trim()
 
     if (!program) {
       return NextResponse.json({ error: "Program not found." }, { status: 404 })
     }
 
-    const availability = await getProgramAvailability(program.slug)
+    if (!verifiedEmail) {
+      return NextResponse.json({ error: "Your account is missing a verified email address." }, { status: 400 })
+    }
+
+    let availability
+
+    try {
+      availability = await getProgramAvailability(program.slug)
+    } catch {
+      return NextResponse.json({ error: "Registration is temporarily unavailable. Please try again shortly." }, { status: 503 })
+    }
 
     if (availability.soldOut) {
       return NextResponse.json({ error: "This class is full. Please join the waiting list instead." }, { status: 409 })
@@ -54,73 +69,47 @@ export async function POST(request: Request) {
 
     const { error: profileError } = await supabase.from("parent_profiles").upsert({
       id: user.id,
-      email: body.parentEmail.toLowerCase(),
-      first_name: body.parentFirstName,
-      last_name: body.parentLastName,
-      phone: body.phoneNumber,
+      email: verifiedEmail,
+      first_name: normalizedParentFirstName,
+      last_name: normalizedParentLastName,
+      phone: normalizedPhoneNumber,
     })
 
     if (profileError) {
       throw profileError
     }
 
-    const { data: existing } = await supabase
-      .from("registrations")
-      .select("id,status,reservation_expires_at")
-      .eq("program_id", programRecord.id)
-      .eq("user_id", user.id)
-      .eq("child_name", body.childName)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle()
+    const { data: registrationId, error: reservationError } = await supabase.rpc("reserve_registration", {
+      p_program_id: programRecord.id,
+      p_user_id: user.id,
+      p_parent_first_name: normalizedParentFirstName,
+      p_parent_last_name: normalizedParentLastName,
+      p_parent_email: verifiedEmail,
+      p_phone_number: normalizedPhoneNumber,
+      p_child_name: normalizedChildName,
+      p_child_age: body.childAge,
+      p_liability_accepted: body.waiverAccepted,
+      p_photo_consent_accepted: body.photoConsentAccepted,
+      p_program_fee: program.programFee,
+      p_organization_fee: program.organizationFee,
+      p_total_fee: program.totalFee,
+      p_reservation_expires_at: reservationExpiresAt,
+    })
 
-    if (existing?.status === "paid") {
-      return NextResponse.json({ error: "This child is already registered for this class." }, { status: 409 })
-    }
-
-    if (
-      existing?.status === "pending_payment" &&
-      existing.reservation_expires_at &&
-      new Date(existing.reservation_expires_at) > new Date()
-    ) {
-      return NextResponse.json({ error: "A checkout session is already active for this child. Please complete that payment first." }, { status: 409 })
-    }
-
-    const { data: registration, error: registrationError } = await supabase
-      .from("registrations")
-      .insert({
-        program_id: programRecord.id,
-        user_id: user.id,
-        parent_first_name: body.parentFirstName,
-        parent_last_name: body.parentLastName,
-        parent_email: body.parentEmail.toLowerCase(),
-        phone_number: body.phoneNumber,
-        child_name: body.childName,
-        child_age: body.childAge,
-        liability_accepted: body.waiverAccepted,
-        photo_consent_accepted: body.photoConsentAccepted,
-        status: "pending_payment",
-        reservation_expires_at: reservationExpiresAt,
-        program_fee: program.programFee,
-        organization_fee: program.organizationFee,
-        total_fee: program.totalFee,
-      })
-      .select("id")
-      .single<{ id: string }>()
-
-    if (registrationError) {
-      throw registrationError
+    if (reservationError || !registrationId) {
+      throw reservationError ?? new Error("Unable to reserve a spot for this class.")
     }
 
     const origin = request.headers.get("origin") ?? undefined
     const stripe = getStripeClient()
+    const idempotencyKey = `checkout:${user.id}:${program.slug}:${normalizedChildName.toLowerCase()}`
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       success_url: `${getBaseUrl(origin)}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${getBaseUrl(origin)}/register?program=${program.slug}&cancelled=1`,
-      customer_email: body.parentEmail.toLowerCase(),
+      customer_email: verifiedEmail,
       metadata: {
-        registrationId: registration.id,
+        registrationId: registrationId,
         programSlug: program.slug,
         userId: user.id,
       },
@@ -136,6 +125,8 @@ export async function POST(request: Request) {
           },
         },
       ],
+    }, {
+      idempotencyKey,
     })
 
     const { error: updateError } = await supabase
@@ -143,7 +134,7 @@ export async function POST(request: Request) {
       .update({
         stripe_session_id: session.id,
       })
-      .eq("id", registration.id)
+      .eq("id", registrationId)
 
     if (updateError) {
       throw updateError

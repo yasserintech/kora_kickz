@@ -1,22 +1,31 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { getSupabaseBrowserClient } from "@/lib/supabase"
+
+type WaitlistOption = {
+  programSlug: string
+  label: string
+}
 
 type Props = {
   programSlug: string
   requestedTimes?: string[]
+  requestedOptions?: WaitlistOption[]
   title?: string
 }
 
-export function WaitlistForm({ programSlug, requestedTimes = [], title }: Props) {
+export function WaitlistForm({ programSlug, requestedTimes = [], requestedOptions = [], title }: Props) {
   const [parentName, setParentName] = useState("")
   const [email, setEmail] = useState("")
   const [selectedTimes, setSelectedTimes] = useState<string[]>(requestedTimes)
+  const [selectedOptionSlugs, setSelectedOptionSlugs] = useState<string[]>(requestedOptions.map((option) => option.programSlug))
   const [state, setState] = useState<"idle" | "submitting" | "success" | "error">("idle")
   const [message, setMessage] = useState("")
+  const supabase = useMemo(() => getSupabaseBrowserClient(), [])
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -24,16 +33,23 @@ export function WaitlistForm({ programSlug, requestedTimes = [], title }: Props)
     setMessage("")
 
     try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      const selectedOptions = requestedOptions.filter((option) => selectedOptionSlugs.includes(option.programSlug))
       const response = await fetch("/api/waitlist", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
         },
         body: JSON.stringify({
           programSlug,
           parentName,
           email,
           requestedTimes: selectedTimes,
+          requestedOptions: selectedOptions,
         }),
       })
 
@@ -48,6 +64,7 @@ export function WaitlistForm({ programSlug, requestedTimes = [], title }: Props)
       setParentName("")
       setEmail("")
       setSelectedTimes(requestedTimes)
+      setSelectedOptionSlugs(requestedOptions.map((option) => option.programSlug))
     } catch (error) {
       setState("error")
       setMessage(error instanceof Error ? error.message : "Unable to join the waiting list.")
@@ -80,7 +97,33 @@ export function WaitlistForm({ programSlug, requestedTimes = [], title }: Props)
           />
         </div>
       </div>
-      {requestedTimes.length ? (
+      {requestedOptions.length ? (
+        <div className="space-y-2">
+          <Label>Preferred Class</Label>
+          <div className="space-y-2">
+            {requestedOptions.map((option) => {
+              const checked = selectedOptionSlugs.includes(option.programSlug)
+
+              return (
+                <label key={option.programSlug} className="flex items-center gap-2 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={(event) => {
+                      setSelectedOptionSlugs((current) =>
+                        event.target.checked
+                          ? [...current, option.programSlug]
+                          : current.filter((item) => item !== option.programSlug)
+                      )
+                    }}
+                  />
+                  <span>{option.label}</span>
+                </label>
+              )
+            })}
+          </div>
+        </div>
+      ) : requestedTimes.length ? (
         <div className="space-y-2">
           <Label>Preferred Class Time</Label>
           <div className="space-y-2">

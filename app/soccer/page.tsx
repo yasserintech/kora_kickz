@@ -99,7 +99,7 @@ export default function SoccerPage() {
         <div className="container mx-auto px-4">
           <h2 className="mb-12 text-center text-3xl font-bold">Age Groups</h2>
 
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-2">
             <div className="rounded-lg bg-white p-8 shadow-md">
               <h3 className="mb-4 text-center text-xl font-bold text-red-600">Parent &amp; Me (Age 2)</h3>
               <ul className="space-y-2 text-gray-700">
@@ -119,17 +119,6 @@ export default function SoccerPage() {
                 <li>• Introduction to teamwork concepts</li>
                 <li>• 45-minute sessions</li>
                 <li>• Focus on skill development through play</li>
-              </ul>
-            </div>
-
-            <div className="rounded-lg bg-white p-8 shadow-md">
-              <h3 className="mb-4 text-center text-xl font-bold text-red-600">Future Stars (Ages 6+)</h3>
-              <ul className="space-y-2 text-gray-700">
-                <li>• Advanced skill development</li>
-                <li>• Tactical understanding</li>
-                <li>• Competitive small-sided games</li>
-                <li>• 45-minute sessions</li>
-                <li>• Preparation for stronger game play</li>
               </ul>
             </div>
           </div>

@@ -18,5 +18,16 @@ export function getStripeClient() {
 }
 
 export function getBaseUrl(origin?: string) {
-  return origin ?? env.appUrl
+  try {
+    const appOrigin = new URL(env.appUrl).origin
+
+    if (!origin) {
+      return appOrigin
+    }
+
+    const requestOrigin = new URL(origin).origin
+    return requestOrigin === appOrigin ? requestOrigin : appOrigin
+  } catch {
+    return env.appUrl
+  }
 }

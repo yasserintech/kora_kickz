@@ -109,57 +109,46 @@ export async function getProgramAvailability(programSlug: string): Promise<Progr
     return defaultAvailability
   }
 
-  try {
-    const supabase = getSupabaseServiceClient()
-    const programRecord = await getProgramRecordBySlug(program.slug)
+  const supabase = getSupabaseServiceClient()
+  const programRecord = await getProgramRecordBySlug(program.slug)
 
-    if (!programRecord) {
-      throw new Error("Program record not found.")
-    }
+  if (!programRecord) {
+    throw new Error("Program record not found.")
+  }
 
-    const { data, error } = await supabase
-      .from("registrations")
-      .select("status,reservation_expires_at")
-      .eq("program_id", programRecord.id)
-      .returns<RegistrationRecord[]>()
+  const { data, error } = await supabase
+    .from("registrations")
+    .select("status,reservation_expires_at")
+    .eq("program_id", programRecord.id)
+    .returns<RegistrationRecord[]>()
 
-    if (error) {
-      throw error
-    }
-
-    const now = new Date()
-    const paidCount = data.filter((registration) => registration.status === "paid").length
-    const activeReservations = data.filter((registration) => {
-      if (registration.status === "paid") {
-        return true
-      }
-
-      if (registration.status !== "pending_payment" || !registration.reservation_expires_at) {
-        return false
-      }
-
-      return new Date(registration.reservation_expires_at) > now
-    }).length
-
-    const remaining = Math.max(programRecord.capacity - activeReservations, 0)
-
-    return {
-      capacity: programRecord.capacity,
-      paidCount,
-      reservedCount: activeReservations,
-      remaining,
-      soldOut: remaining === 0,
-      message: getAvailabilityMessage(remaining),
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      return {
-        ...defaultAvailability,
-        message: defaultAvailability.message,
-      }
-    }
-
+  if (error) {
     throw error
+  }
+
+  const now = new Date()
+  const paidCount = data.filter((registration) => registration.status === "paid").length
+  const activeReservations = data.filter((registration) => {
+    if (registration.status === "paid") {
+      return true
+    }
+
+    if (registration.status !== "pending_payment" || !registration.reservation_expires_at) {
+      return false
+    }
+
+    return new Date(registration.reservation_expires_at) > now
+  }).length
+
+  const remaining = Math.max(programRecord.capacity - activeReservations, 0)
+
+  return {
+    capacity: programRecord.capacity,
+    paidCount,
+    reservedCount: activeReservations,
+    remaining,
+    soldOut: remaining === 0,
+    message: getAvailabilityMessage(remaining),
   }
 }
 
@@ -168,6 +157,7 @@ export async function createOrUpdateProgramWaitlistEntry(input: {
   parentName: string
   email: string
   requestedTimes: string[]
+  userId?: string | null
 }) {
   const programRecord = await getProgramRecordBySlug(input.programSlug)
 
@@ -179,6 +169,7 @@ export async function createOrUpdateProgramWaitlistEntry(input: {
   const payload = {
     program_id: programRecord.id,
     program_slug: programRecord.slug,
+    user_id: input.userId ?? null,
     parent_name: input.parentName,
     email: input.email.toLowerCase(),
     requested_time_labels: input.requestedTimes,

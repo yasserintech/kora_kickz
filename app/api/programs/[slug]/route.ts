@@ -5,10 +5,10 @@ export const dynamic = "force-dynamic"
 
 export async function GET(
   _request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params
+    const { slug } = await params
     const availability = await getProgramAvailability(slug)
     return NextResponse.json(availability)
   } catch (error) {
@@ -16,7 +16,7 @@ export async function GET(
       {
         error: error instanceof Error ? error.message : "Unable to load program availability.",
       },
-      { status: 500 }
+      { status: 503 }
     )
   }
 }

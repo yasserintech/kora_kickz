@@ -9,15 +9,14 @@ import {
 export const dynamic = "force-dynamic"
 
 export default async function SoccerRegistrationPage() {
-  const [springTen, springEleven, parentAndMe, juniorStrikers, futureStars] = await Promise.all([
+  const [springTen, springEleven, parentAndMe, juniorStrikers] = await Promise.all([
     getHydratedProgramBySlug("bright-busy-saturday-academy-10am"),
     getHydratedProgramBySlug("bright-busy-saturday-academy-11am"),
     getHydratedProgramBySlug("summer-soccer-parent-and-me-10am"),
     getHydratedProgramBySlug("summer-soccer-junior-strikers-11am"),
-    getHydratedProgramBySlug("summer-soccer-future-stars-12pm"),
   ])
 
-  if (!springTen || !springEleven || !parentAndMe || !juniorStrikers || !futureStars) {
+  if (!springTen || !springEleven || !parentAndMe || !juniorStrikers) {
     throw new Error("Unable to load registration classes.")
   }
 
@@ -28,7 +27,7 @@ export default async function SoccerRegistrationPage() {
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-red-600">Soccer Registration</p>
           <h1 className="mt-4 text-4xl font-extrabold text-black md:text-5xl">Registration</h1>
           <p className="mt-4 text-lg text-gray-700">
-            Our current spring class is already in progress, and summer registration is now open for three separate
+            Our current spring class is already in progress, and summer registration is now open for two separate
             paid Saturday class options.
           </p>
         </div>
@@ -51,7 +50,7 @@ export default async function SoccerRegistrationPage() {
           </div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-2">
           <div className="rounded-xl border border-red-100 bg-white p-6 shadow-md">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-red-600">Age Range</p>
             <p className="mt-2 text-lg font-semibold text-black">Age 2</p>
@@ -75,19 +74,6 @@ export default async function SoccerRegistrationPage() {
             <p className="mt-2 text-sm text-gray-600">12-week summer session</p>
             <Button asChild className="mt-6 w-full bg-red-600 hover:bg-red-700">
               <Link href={`/register?program=${juniorStrikers.slug}`}>Register For This Class</Link>
-            </Button>
-          </div>
-
-          <div className="rounded-xl border border-red-100 bg-white p-6 shadow-md">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-red-600">Age Range</p>
-            <p className="mt-2 text-lg font-semibold text-black">Ages 6+</p>
-            <h2 className="mt-5 text-2xl font-bold text-black">{futureStars.title}</h2>
-            <p className="mt-3 text-gray-700">{futureStars.timeLabel}</p>
-            <p className="mt-1 text-gray-700">{futureStars.dateRangeLabel}</p>
-            <p className="mt-5 text-3xl font-extrabold text-black">{formatCurrency(futureStars.totalFee)}</p>
-            <p className="mt-2 text-sm text-gray-600">12-week summer session</p>
-            <Button asChild className="mt-6 w-full bg-red-600 hover:bg-red-700">
-              <Link href={`/register?program=${futureStars.slug}`}>Register For This Class</Link>
             </Button>
           </div>
         </div>

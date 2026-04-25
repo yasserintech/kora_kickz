@@ -57,7 +57,6 @@ export const SPRING_PROGRAM_SLUGS = ["bright-busy-saturday-academy-10am", "brigh
 export const SUMMER_PROGRAM_SLUGS = [
   "summer-soccer-parent-and-me-10am",
   "summer-soccer-junior-strikers-11am",
-  "summer-soccer-future-stars-12pm",
 ] as const
 
 const GROUPS = [
@@ -117,6 +116,8 @@ export function getAvailabilityMessage(remaining: number) {
   return "Open For Registration"
 }
 
+export const UNAVAILABLE_AVAILABILITY_MESSAGE = "Registration Temporarily Unavailable"
+
 export const defaultAvailability: ProgramAvailability = {
   capacity: 16,
   paidCount: 0,
@@ -124,4 +125,13 @@ export const defaultAvailability: ProgramAvailability = {
   remaining: 16,
   soldOut: false,
   message: getAvailabilityMessage(16),
+}
+
+export const unavailableAvailability: ProgramAvailability = {
+  capacity: 0,
+  paidCount: 0,
+  reservedCount: 0,
+  remaining: 0,
+  soldOut: true,
+  message: UNAVAILABLE_AVAILABILITY_MESSAGE,
 }
