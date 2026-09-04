@@ -491,7 +491,7 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
             {includesUniform ? (
               <div>
                 <p className="font-semibold text-black">Uniform Included</p>
-                <p>KoraKickz athletic shirt and shorts are included.</p>
+                <p>KoraKickz athletic shirt is included.</p>
               </div>
             ) : null}
             {isPartnerSchool ? (
