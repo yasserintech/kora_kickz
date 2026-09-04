@@ -35,21 +35,21 @@ export default async function SoccerRegistrationPage() {
             <p className="mt-2 text-sm text-gray-600">Free class September 27</p>
             <p className="mt-5 text-3xl font-extrabold text-black">{formatCurrency(koraKickers.totalFee)}</p>
             <p className="mt-2 text-sm text-gray-600">8-week Sunday session</p>
+            <p className="mt-1 text-sm font-semibold text-gray-700">Uniform provided</p>
             <Button asChild className="mt-6 w-full bg-red-600 hover:bg-red-700">
-              <Link href={`/register?program=${koraKickers.slug}`}>Register For Kora Kickers</Link>
+              <Link href={`/register?program=${koraKickers.slug}`}>Register</Link>
             </Button>
           </div>
 
           <div className="rounded-xl border border-red-100 bg-white p-6 shadow-md">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-red-600">Partner School Families</p>
             <h2 className="mt-4 text-2xl font-bold text-black">{partnerSchool.title}</h2>
-            <p className="mt-3 font-semibold text-black">{partnerSchool.timeLabel}</p>
-            <p className="mt-1 text-gray-700">{partnerSchool.dateRangeLabel}</p>
+            <p className="mt-3 text-gray-700">{partnerSchool.dateRangeLabel}</p>
             <p className="mt-2 text-sm text-gray-600">Free classes September 20 &amp; 27</p>
             <p className="mt-5 text-3xl font-extrabold text-black">{formatCurrency(partnerSchool.totalFee)}</p>
-            <p className="mt-2 text-sm text-gray-600">Coach Mo assigns the 11 AM or 12 PM class.</p>
+            <p className="mt-2 text-sm font-semibold text-gray-700">Uniform provided</p>
             <Button asChild className="mt-6 w-full bg-red-600 hover:bg-red-700">
-              <Link href={`/register?program=${partnerSchool.slug}`}>Register As A Partner Family</Link>
+              <Link href={`/register?program=${partnerSchool.slug}`}>Register</Link>
             </Button>
           </div>
         </div>
