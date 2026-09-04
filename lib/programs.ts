@@ -10,7 +10,7 @@ export type ProgramDefinition = {
   sessionsLabel: string
   noClassLabel: string
   timeLabel: string
-  capacity: number
+  capacity: number | null
   programFee: number
   organizationFee: number
   totalFee: number
@@ -30,10 +30,10 @@ export type ProgramGroup = {
 }
 
 export type ProgramAvailability = {
-  capacity: number
+  capacity: number | null
   paidCount: number
   reservedCount: number
-  remaining: number
+  remaining: number | null
   soldOut: boolean
   message: string
 }
@@ -104,7 +104,11 @@ export function formatCurrency(amount: number) {
   }).format(amount)
 }
 
-export function getAvailabilityMessage(remaining: number) {
+export function getAvailabilityMessage(remaining: number | null) {
+  if (remaining === null) {
+    return "Open For Registration"
+  }
+
   if (remaining <= 0) {
     return "Waitlist Open"
   }

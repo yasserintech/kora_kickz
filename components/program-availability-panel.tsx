@@ -72,7 +72,7 @@ export function ProgramAvailabilityPanel({ program, initialAvailability = defaul
       return "bg-gray-200 text-gray-700"
     }
 
-    if (availability.remaining <= 2) {
+    if (availability.remaining !== null && availability.remaining <= 2) {
       return "bg-red-600 text-white"
     }
 

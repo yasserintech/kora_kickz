@@ -1,14 +1,15 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { getHydratedProgramBySlug } from "@/lib/program-service"
-import { formatCurrency } from "@/lib/programs"
+import { getHydratedProgramBySlug, getProgramAvailability } from "@/lib/program-service"
+import { formatCurrency, unavailableAvailability, UNAVAILABLE_AVAILABILITY_MESSAGE } from "@/lib/programs"
 
 export const dynamic = "force-dynamic"
 
 export default async function SoccerRegistrationPage() {
-  const [koraKickers, partnerSchool] = await Promise.all([
+  const [koraKickers, partnerSchool, koraAvailability] = await Promise.all([
     getHydratedProgramBySlug("sunday-soccer-kora-kickers-9am"),
     getHydratedProgramBySlug("sunday-soccer-partner-school"),
+    getProgramAvailability("sunday-soccer-kora-kickers-9am").catch(() => unavailableAvailability),
   ])
 
   if (!koraKickers || !partnerSchool) {
@@ -35,9 +36,10 @@ export default async function SoccerRegistrationPage() {
             <p className="mt-2 text-sm text-gray-600">Free class September 27</p>
             <p className="mt-5 text-3xl font-extrabold text-black">{formatCurrency(koraKickers.totalFee)}</p>
             <p className="mt-2 text-sm text-gray-600">8-week Sunday session</p>
-            <p className="mt-1 text-sm font-semibold text-gray-700">Uniform provided</p>
             <Button asChild className="mt-6 w-full bg-red-600 hover:bg-red-700">
-              <Link href={`/register?program=${koraKickers.slug}`}>Register</Link>
+              <Link href={`/register?program=${koraKickers.slug}`}>
+                {koraAvailability.message === UNAVAILABLE_AVAILABILITY_MESSAGE ? "Check Availability" : koraAvailability.soldOut ? "Join Waiting List" : "Register"}
+              </Link>
             </Button>
           </div>
 
@@ -47,7 +49,6 @@ export default async function SoccerRegistrationPage() {
             <p className="mt-3 text-gray-700">{partnerSchool.dateRangeLabel}</p>
             <p className="mt-2 text-sm text-gray-600">Free classes September 20 &amp; 27</p>
             <p className="mt-5 text-3xl font-extrabold text-black">{formatCurrency(partnerSchool.totalFee)}</p>
-            <p className="mt-2 text-sm font-semibold text-gray-700">Uniform provided</p>
             <Button asChild className="mt-6 w-full bg-red-600 hover:bg-red-700">
               <Link href={`/register?program=${partnerSchool.slug}`}>Register</Link>
             </Button>

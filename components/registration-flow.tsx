@@ -49,6 +49,11 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
   const [photoConsentAccepted, setPhotoConsentAccepted] = useState(false)
   const [loadError, setLoadError] = useState("")
 
+  const isKoraKickers = program.slug === "sunday-soccer-kora-kickers-9am"
+  const isPartnerSchool = program.slug === "sunday-soccer-partner-school"
+  const includesUniform = isKoraKickers || isPartnerSchool
+  const showWaitlist = availability.soldOut && availability.message !== UNAVAILABLE_AVAILABILITY_MESSAGE
+
   const cancelled = searchParams.get("cancelled") === "1"
   const supabase = useMemo(() => getSupabaseBrowserClient(), [])
 
@@ -115,9 +120,13 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
       setSessionReady(true)
     })
     loadAvailability()
+    const availabilityInterval = window.setInterval(loadAvailability, 30000)
+    window.addEventListener("focus", loadAvailability)
 
     return () => {
       active = false
+      window.clearInterval(availabilityInterval)
+      window.removeEventListener("focus", loadAvailability)
     }
   }, [program.slug, supabase])
 
@@ -225,6 +234,8 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
       const payload = await response.json()
 
       if (!response.ok) {
+        const availabilityResponse = await fetch(`/api/programs/${program.slug}`, { cache: "no-store" })
+        setAvailability(availabilityResponse.ok ? await availabilityResponse.json() : unavailableAvailability)
         throw new Error(payload.error ?? "Unable to start checkout.")
       }
 
@@ -239,6 +250,24 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
   return (
     <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
       <div className="space-y-6">
+        {showWaitlist ? (
+          <Card className="border-red-100 shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-2xl">Waiting List</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-gray-700">
+                This class is currently full. Join the waiting list and we will contact you if a spot opens.
+              </p>
+              <WaitlistForm
+                programSlug={program.slug}
+                requestedTimes={[program.timeLabel]}
+                title={`Join the waitlist for the ${program.timeLabel} class`}
+              />
+            </CardContent>
+          </Card>
+        ) : (
+          <>
         <Card className="border-red-100 shadow-sm">
           <CardHeader>
             <CardTitle className="text-2xl">Step 1: Add To Cart</CardTitle>
@@ -428,6 +457,8 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
             </form>
           </CardContent>
         </Card>
+          </>
+        )}
       </div>
 
       <div className="space-y-6">
@@ -436,7 +467,7 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
             <CardTitle className="text-2xl">Registration Summary</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-sm text-gray-700">
-            <div className={`inline-flex rounded-full px-3 py-1 font-semibold ${availability.message === UNAVAILABLE_AVAILABILITY_MESSAGE ? "bg-gray-200 text-gray-700" : availability.soldOut ? "bg-black text-white" : availability.remaining <= 2 ? "bg-red-600 text-white" : "bg-red-100 text-red-700"}`}>
+            <div className={`inline-flex rounded-full px-3 py-1 font-semibold ${availability.message === UNAVAILABLE_AVAILABILITY_MESSAGE ? "bg-gray-200 text-gray-700" : availability.soldOut ? "bg-black text-white" : availability.remaining !== null && availability.remaining <= 2 ? "bg-red-600 text-white" : "bg-red-100 text-red-700"}`}>
               {availability.message}
             </div>
             <div>
@@ -457,10 +488,22 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
               <p>{program.locationName}</p>
               <p>{program.locationAddress}</p>
             </div>
+            {includesUniform ? (
+              <div>
+                <p className="font-semibold text-black">Uniform Included</p>
+                <p>KoraKickz athletic shirt and shorts are included.</p>
+              </div>
+            ) : null}
+            {isPartnerSchool ? (
+              <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+                <p className="font-semibold text-black">Partner School Families Only</p>
+                <p className="mt-2">This registration is only for children attending a KoraKickz partner school.</p>
+              </div>
+            ) : null}
             <div>
               <p className="font-semibold text-black">What To Bring To Class</p>
               <ul className="mt-2 space-y-1">
-                {program.bringItems.map((item) => (
+                {program.bringItems.filter((item) => !includesUniform || item !== "Athletic shirt and shorts").map((item) => (
                   <li key={item}>• {item}</li>
                 ))}
               </ul>
@@ -478,24 +521,6 @@ export function RegistrationFlow({ program, initialAvailability }: Props) {
             </div>
           </CardContent>
         </Card>
-
-        {availability.soldOut && availability.message !== UNAVAILABLE_AVAILABILITY_MESSAGE ? (
-          <Card className="border-red-100 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-2xl">Waiting List</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-gray-700">
-                This class is currently full. Join the waiting list and we will contact you if a spot opens.
-              </p>
-              <WaitlistForm
-                programSlug={program.slug}
-                requestedTimes={[program.timeLabel]}
-                title={`Join the waitlist for the ${program.timeLabel} class`}
-              />
-            </CardContent>
-          </Card>
-        ) : null}
 
         <p className="text-sm text-gray-600">
           Need to review the class first? Visit{" "}

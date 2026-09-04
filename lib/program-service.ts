@@ -16,7 +16,7 @@ type ProgramRecord = {
   slug: string
   title: string
   sport: string
-  capacity: number
+  capacity: number | null
   program_fee: number
   organization_fee: number
   total_fee: number
@@ -140,7 +140,7 @@ export async function getProgramAvailability(programSlug: string): Promise<Progr
     return new Date(registration.reservation_expires_at) > now
   }).length
 
-  const remaining = Math.max(programRecord.capacity - activeReservations, 0)
+  const remaining = programRecord.capacity === null ? null : Math.max(programRecord.capacity - activeReservations, 0)
 
   return {
     capacity: programRecord.capacity,

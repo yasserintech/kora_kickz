@@ -84,7 +84,7 @@ export function ClassTimeSelection({ group }: Props) {
           return (
             <Card key={program.slug} className="border-red-100 shadow-sm">
               <CardHeader className="space-y-3">
-                <div className={`inline-flex w-fit rounded-full px-3 py-1 text-sm font-semibold ${availability.message === UNAVAILABLE_AVAILABILITY_MESSAGE ? "bg-gray-200 text-gray-700" : availability.soldOut ? "bg-black text-white" : availability.remaining <= 2 ? "bg-red-600 text-white" : "bg-red-100 text-red-700"}`}>
+                <div className={`inline-flex w-fit rounded-full px-3 py-1 text-sm font-semibold ${availability.message === UNAVAILABLE_AVAILABILITY_MESSAGE ? "bg-gray-200 text-gray-700" : availability.soldOut ? "bg-black text-white" : availability.remaining !== null && availability.remaining <= 2 ? "bg-red-600 text-white" : "bg-red-100 text-red-700"}`}>
                   {availability.message}
                 </div>
                 <CardTitle className="text-2xl">{program.title}</CardTitle>
