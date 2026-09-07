@@ -29,7 +29,7 @@ export default async function SoccerRegistrationPage() {
 
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="rounded-xl border border-red-100 bg-white p-6 shadow-md">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-red-600">Ages 2–4</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-red-600">Ages 2.5–4</p>
             <h2 className="mt-4 text-2xl font-bold text-black">{koraKickers.title}</h2>
             <p className="mt-3 font-semibold text-black">{koraKickers.timeLabel}</p>
             <p className="mt-1 text-gray-700">{koraKickers.dateRangeLabel}</p>
