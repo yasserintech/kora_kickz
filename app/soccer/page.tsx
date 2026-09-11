@@ -11,10 +11,10 @@ export default function SoccerPage() {
       <section className="relative flex h-[50vh] items-center justify-center">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/soccer-program.png?height=600&width=1600"
-            alt="Kids playing soccer"
+            src="/photos/william.jpeg"
+            alt="William smiling during a KoraKickz class"
             fill
-            className="object-cover brightness-50"
+            className="object-cover object-[center_38%] brightness-50"
             priority
           />
         </div>
@@ -89,7 +89,7 @@ export default function SoccerPage() {
               </p>
             </div>
             <div className="relative h-[400px] overflow-hidden rounded-lg">
-              <Image src="/koraaaa.webp" alt="Soccer training" fill className="object-cover" />
+              <Image src="/photos/william.jpeg" alt="William smiling in green glasses during a KoraKickz class" fill className="object-cover" />
             </div>
           </div>
         </div>

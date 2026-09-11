@@ -1,0 +1,23 @@
+import Image from "next/image"
+import Link from "next/link"
+import SchoolDemoForm from "@/components/marketing/school-demo-form"
+import { SportCards } from "@/components/marketing/home"
+import styles from "@/components/marketing/marketing.module.css"
+export const metadata = { title: "Sports Enrichment for Schools | KoraKickz", description: "Affordable soccer, basketball, and non-contact martial arts at your New York school. Age-appropriate coaching, equipment included. Request a free demo." }
+export default function SchoolsPage(){return <main className={styles.site}>
+  <header className={styles.pageIntro}><div><p className={styles.eyebrow}>FOR SCHOOLS</p><h1>Big opportunities.<br />Right at your school.</h1><p>Affordable sports enrichment that fits your students, your schedule, and your budget.</p><a href="#demo" className={styles.primary} style={{marginTop:24}}>Request a Free Demo</a></div></header>
+  <section className={`${styles.section} ${styles.storyGrid}`}><div className={styles.schoolPhoto}><Image src="/photos/school.jpeg" alt="Students in purple uniforms with a KoraKickz coach at school" fill priority sizes="(max-width: 700px) 100vw, 50vw" style={{objectFit:"cover"}} /></div><div><p className={styles.eyebrow}>WE BRING THE SPORTS TO YOU</p><h2>One partner.<br />More ways to play.</h2><p className={styles.intro}>KoraKickz brings engaging sports programs directly to your school. Explore soccer one month, basketball the next, or introduce non-contact martial arts. Choose a favorite or create a rotation that gives students something new to discover.</p><p className={styles.intro}>We bring the equipment and lead the activities, making it easier for your staff to offer meaningful enrichment without adding another program to plan.</p></div></section>
+  <div className={styles.benefitSection}><section className={styles.section}><p className={styles.eyebrow}>BUILT AROUND YOUR SCHOOL</p><h2>The right fit for every age.</h2><p className={styles.intro}>Whether you’re a daycare, elementary school, middle school, or high school, we adapt the curriculum to your students’ ages, abilities, and interests.</p><div className={styles.threeGrid}>
+    <article className={styles.benefitCard}><h3>Daycare & preschool</h3><p>Playful introductions to movement, balance, coordination, listening, and taking turns.</p></article>
+    <article className={styles.benefitCard}><h3>Elementary school</h3><p>Engaging games that build sports fundamentals, cooperation, and the confidence to try something new.</p></article>
+    <article className={styles.benefitCard}><h3>Middle & high school</h3><p>Age-appropriate challenges that develop technique, teamwork, discipline, and active habits.</p></article>
+  </div></section></div>
+  <section className={styles.section}><h2>Sports your students can explore.</h2><p className={styles.intro}>All three options are available for school programs. We’ll help you choose a single sport or a rotation.</p><SportCards /></section>
+  <div className={styles.benefitSection}><section className={styles.section}><h2>Easy to bring in.<br />Built to make a difference.</h2><div className={styles.steps} style={{marginTop:32}}>
+    <article className={styles.step}><h3>1. Tell us about your school</h3><p>Share your age groups, space, schedule, and budget. We’ll work with you to shape the right program.</p></article>
+    <article className={styles.step}><h3>2. See a free demo</h3><p>Experience our coaching and activities in action before deciding what works for your students.</p></article>
+    <article className={styles.step}><h3>3. Let’s get moving</h3><p>We bring the equipment and lead the sessions, with activities designed for your school community.</p></article>
+  </div></section></div>
+  <section className={styles.section} id="demo"><p className={styles.eyebrow}>LET’S FIND YOUR FIT</p><h2>Request Your Free Demo</h2><p className={styles.intro}>Tell us a little about your school. Our team will follow up to discuss your needs and arrange a demo—no date selection needed.</p>{process.env.SCHOOL_DEMO_RESEND_API_KEY && process.env.SCHOOL_DEMO_EMAIL_FROM ? <SchoolDemoForm /> : <div className={styles.instagramCallout}><h3>Bring KoraKickz to your school</h3><p>Email us your name, school name, phone number, and student age group. We’ll follow up to discuss your program and arrange a free demo.</p><a className={styles.primary} href="mailto:korakickz@gmail.com?subject=Free%20School%20Demo%20Request&amp;body=Name%3A%20%0ASchool%3A%20%0APhone%3A%20%0AStudent%20age%20group%3A%20%0A">Email Us to Arrange a Free Demo</a></div>}<p style={{marginTop:28}}>Looking for weekend soccer? <Link href="/find-my-class" className={styles.textLink}>Find your child’s class ↗</Link></p></section>
+</main>}
+

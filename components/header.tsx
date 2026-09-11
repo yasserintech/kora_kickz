@@ -4,108 +4,22 @@ import { useState } from "react"
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import Logo from "./logo"
+import styles from "./marketing/marketing.module.css"
 
+const links = [["Home", "/"], ["Our Mission", "/mission"], ["Soccer", "/soccer"], ["Sports Programs", "/sports-programs"], ["Gallery", "/gallery"], ["For Schools", "/for-schools"], ["Account", "/account"]]
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-  return (
-    <header className="bg-black text-white">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center">
-            <Logo />
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-white hover:text-red-500 transition-colors">
-              Home
-            </Link>
-            <Link href="/mission" className="text-white hover:text-red-500 transition-colors">
-              Mission
-            </Link>
-            <Link href="/soccer" className="text-white hover:text-red-500 transition-colors">
-              Soccer
-            </Link>
-            <Link href="/basketball" className="text-white hover:text-red-500 transition-colors">
-              Basketball
-            </Link>
-            <Link href="/mma" className="text-white hover:text-red-500 transition-colors">
-              MMA/Boxing/Wrestling
-            </Link>
-            <Link href="/policy" className="text-white hover:text-red-500 transition-colors">
-              Policy
-            </Link>
-            <Link href="/account" className="text-white hover:text-red-500 transition-colors">
-              Account
-            </Link>
-          </nav>
-
-          {/* Mobile Menu Button */}
-          <button className="md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Toggle menu">
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Navigation */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-black">
-          <div className="container mx-auto px-4 py-4">
-            <nav className="flex flex-col space-y-4">
-              <Link
-                href="/"
-                className="text-white hover:text-red-500 transition-colors py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Home
-              </Link>
-              <Link
-                href="/mission"
-                className="text-white hover:text-red-500 transition-colors py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Mission
-              </Link>
-              <Link
-                href="/soccer"
-                className="text-white hover:text-red-500 transition-colors py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Soccer
-              </Link>
-              <Link
-                href="/basketball"
-                className="text-white hover:text-red-500 transition-colors py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Basketball
-              </Link>
-              <Link
-                href="/mma"
-                className="text-white hover:text-red-500 transition-colors py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                MMA/Boxing/Wrestling
-              </Link>
-              <Link
-                href="/policy"
-                className="text-white hover:text-red-500 transition-colors py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Policy
-              </Link>
-              <Link
-                href="/account"
-                className="text-white hover:text-red-500 transition-colors py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Account
-              </Link>
-            </nav>
-          </div>
-        </div>
-      )}
-    </header>
-  )
+  return <header className={styles.header}>
+    <div className={styles.headerInner}>
+      <Link href="/" aria-label="KoraKickz home"><Logo /></Link>
+      <nav className={styles.nav} aria-label="Main navigation">
+        {links.map(([name, href]) => <Link key={href} href={href}>{name}</Link>)}
+        <Link className={styles.navCta} href="/find-my-class">Find My Class</Link>
+      </nav>
+      <button className={styles.menuButton} onClick={() => setIsMenuOpen(open => !open)} aria-label={isMenuOpen ? "Close menu" : "Open menu"} aria-expanded={isMenuOpen} aria-controls="mobile-navigation">{isMenuOpen ? <X /> : <Menu />}</button>
+    </div>
+    {isMenuOpen && <nav id="mobile-navigation" className={styles.mobileNav} aria-label="Mobile navigation">
+      {[...links, ["Find My Class", "/find-my-class"]].map(([name, href]) => <Link key={href} href={href} onClick={() => setIsMenuOpen(false)}>{name}</Link>)}
+    </nav>}
+  </header>
 }

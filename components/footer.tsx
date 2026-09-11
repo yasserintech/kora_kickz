@@ -1,82 +1,18 @@
 import Link from "next/link"
-import { Phone, Mail } from "lucide-react"
 import Logo from "./logo"
-import { KORAKICKZ_AGE_COPY } from "@/lib/programs"
+import { Instagram, Facebook } from "lucide-react"
+import styles from "./marketing/marketing.module.css"
 
 export default function Footer() {
-  return (
-    <footer className="bg-black text-white py-12">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="flex flex-col items-start">
-            <Logo />
-            <p className="mt-4 text-gray-400">
-              Building champions for life through quality sports programs. {KORAKICKZ_AGE_COPY}
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-bold mb-4">Programs</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/soccer" className="text-gray-400 hover:text-red-500 transition-colors">
-                  Soccer
-                </Link>
-              </li>
-              <li>
-                <Link href="/basketball" className="text-gray-400 hover:text-red-500 transition-colors">
-                  Basketball
-                </Link>
-              </li>
-              <li>
-                <Link href="/mma" className="text-gray-400 hover:text-red-500 transition-colors">
-                  MMA/Boxing/Wrestling
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-bold mb-4">About Us</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/mission" className="text-gray-400 hover:text-red-500 transition-colors">
-                  Our Mission
-                </Link>
-              </li>
-              <li>
-                <Link href="/policy" className="text-gray-400 hover:text-red-500 transition-colors">
-                  Parent Policy
-                </Link>
-              </li>
-              <li>
-                {/* <Link href="/mission#staff" className="text-gray-400 hover:text-red-500 transition-colors">
-                  Our Staff
-                </Link> */}
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-bold mb-4">Contact Us</h3>
-            <ul className="space-y-2">
-              <li className="flex items-center gap-2 text-gray-400">
-                <Phone size={16} className="text-red-500" />
-                (201) 233-3333
-              </li>
-              <li className="flex items-center gap-2 text-gray-400">
-                <Mail size={16} className="text-red-500" />
-                korakickz@gmail.com
-              </li>
-              <li className="text-gray-400">33-02 30th Ave, Astoria, New York</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Korakickz. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
-  )
+  return <footer className={styles.footer}>
+    <div className={styles.footerGrid}>
+      <div><Logo /><p className="mt-4">Building champions for life.<br />Weekend soccer in Queens for ages 2–5.<br />Sports programs for schools across New York.</p></div>
+      <div><h3>Explore KoraKickz</h3><ul>
+        <li><Link href="/soccer">Soccer</Link></li><li><Link href="/sports-programs">Sports Programs</Link></li><li><Link href="/for-schools">For Schools</Link></li><li><Link href="/mission">Our Mission</Link></li><li><Link href="/gallery">Photo Gallery</Link></li><li><Link href="/policy">Parent Policy</Link></li><li><Link href="/account">Account</Link></li>
+      </ul></div>
+      <div><h3>Get in Touch</h3><ul><li><a href="tel:2012333333">(201) 233-3333</a></li><li><a href="mailto:korakickz@gmail.com">korakickz@gmail.com</a></li><li><a href="https://www.instagram.com/korakickz/" target="_blank" rel="noopener noreferrer">See us on Instagram ↗</a></li></ul></div>
+    </div>
+    <div className={styles.footerBottom}><span>© {new Date().getFullYear()} KoraKickz. All rights reserved.</span><nav className={styles.socialLinks} aria-label="Follow KoraKickz"><a href="https://www.instagram.com/korakickz/" target="_blank" rel="noopener noreferrer" aria-label="KoraKickz on Instagram (opens in a new tab)"><Instagram size={23} aria-hidden="true" /></a><a href="https://www.facebook.com/korakickz/" target="_blank" rel="noopener noreferrer" aria-label="KoraKickz on Facebook (opens in a new tab)"><Facebook size={23} aria-hidden="true" /></a></nav></div>
+  </footer>
 }
+
