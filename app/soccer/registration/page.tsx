@@ -27,6 +27,11 @@ export default async function SoccerRegistrationPage() {
           </p>
         </div>
 
+        <div role="status" className="mb-8 rounded-xl border border-red-200 bg-red-50 p-6 text-red-900">
+          <h2 className="text-xl font-bold">Class Cancelled — Sunday, October 25, 2026</h2>
+          <p className="mt-2">There will be no soccer class on Sunday, October 25.</p>
+        </div>
+
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="rounded-xl border border-red-100 bg-white p-6 shadow-md">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-red-600">Ages 2.5–4</p>
